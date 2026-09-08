@@ -210,7 +210,7 @@ A weboldal a helyi hálózaton futó Raspberry Pi 4-en üzemel, ahonnan a **Tail
 ssh raspberry
 ```
 
-### 2. A módosított fájlok és médiaanyagok szinkronizálása:
+### 2. A módosított fájlok és médiaanyagok szinkronizálása a Pi-re:
 ```powershell
 scp index.html styles.css data.js app.js cadini_di_misurina.jpg hero_*.jpg hero_*.mp4 hero_*.webm PROJECT_SUMMARY.md elevation_profiles.json raspberry:/home/milan/dolomitok-web/
 ```
@@ -220,4 +220,18 @@ scp index.html styles.css data.js app.js cadini_di_misurina.jpg hero_*.jpg hero_
 ssh raspberry "sudo systemctl restart dolomitok-web.service"
 ssh raspberry "sudo systemctl status dolomitok-web.service"
 ```
+
+---
+
+## 🐙 12. GitHub Szinkronizáció & Verziókezelés
+
+A projekt teljes forráskódja és adatállománya verziókezelve van a GitHubon az adatvesztés megelőzése érdekében:
+
+* **GitHub Repository:** [`https://github.com/milanhorvath98/dolomitoktura.git`](https://github.com/milanhorvath98/dolomitoktura.git)
+* **Branch:** `main`
+* **Automatikus egygombos szinkronizáló szkript:** [`sync.ps1`](file:///C:/Users/horvi/Documents/Antigravity%20CLI/dolomitok%20tura/sync.ps1)
+  * Elvégzi a git commitot és felküldi a GitHubra (`git push origin main`)
+  * Automatikusan frissíti a Raspberry Pi webszervert is (`scp`)
+  * Futtatása: `.\sync.ps1` vagy `.\sync.ps1 -Message "Egyedi leiras"`
+
 
