@@ -2,6 +2,8 @@ param(
     [string]$Message = ""
 )
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = "Continue"
 $ProjectPath = $PSScriptRoot
 Set-Location $ProjectPath
