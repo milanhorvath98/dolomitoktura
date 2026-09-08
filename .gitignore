@@ -1,0 +1,13 @@
+﻿# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.BIN/
+.DS_Store
+
+# IDE and editors
+.vscode/
+.idea/
+*.suo
+*.tmp
+*.log
