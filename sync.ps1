@@ -8,8 +8,12 @@ $ErrorActionPreference = "Continue"
 $ProjectPath = $PSScriptRoot
 Set-Location $ProjectPath
 
+if (Test-Path "$env:LOCALAPPDATA\Programs\MinGit\cmd") {
+    $env:Path = "$env:LOCALAPPDATA\Programs\MinGit\cmd;$env:Path"
+}
+
 Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host "  DOLOMITOK TURA - AUTOMATIKUS SZINKRON" -ForegroundColor Cyan
+Write-Host "     LORDTURA - AUTOMATIKUS SZINKRON" -ForegroundColor Cyan
 Write-Host "=========================================" -ForegroundColor Cyan
 
 # 1. Git Commit & Push (GitHub)
@@ -40,7 +44,7 @@ if ($LASTEXITCODE -eq 0) {
 
 # 2. Szinkronizáció a Raspberry Pi szerverre
 Write-Host "`n[3/3] Másolás a Raspberry Pi webszerverre..." -ForegroundColor Yellow
-scp -r -o BatchMode=yes -o ConnectTimeout=5 index.html styles.css app.js data.js elevation_profiles.json favicon.svg hero_*.* cadini_di_misurina.jpg gpx raspberry:/home/milan/dolomitok-web/
+scp -r -o BatchMode=yes -o ConnectTimeout=5 index.html dolomitok.html styles.css app.js data.js elevation_profiles.json favicon.svg hero_*.* cadini_di_misurina.jpg gpx durrewand raspberry:/home/milan/dolomitok-web/
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Raspberry Pi webszerver sikeresen frissítve!" -ForegroundColor Green
 } else {

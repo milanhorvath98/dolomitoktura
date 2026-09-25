@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dürre Wand & Plattenstein Túra • 2026. szeptember 26.</title>
+  
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data:;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net;
+    img-src 'self' data: blob: https: http:;
+    connect-src 'self' https://api.open-meteo.com https://*.tile.openstreetmap.org https://*.tile.opentopomap.org;
+    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;
+  ">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous">
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP CROSS-PROJECT BANNER
+       ========================================================================== -->
+  <div class="top-cross-bar">
+    <div class="badge"><i class="fa-solid fa-mountain-sun"></i> EGYNAPOS ALPESI TÚRA • 2026. SZEPTEMBER 26.</div>
+    <div class="links">
+      <a href="../index.html" title="Vissza a LordTúra Kezdőlapra" style="margin-right: 0.8rem;">
+        <i class="fa-solid fa-house"></i> <strong>LordTúra Kezdőlap</strong>
+      </a>
+      <a href="../dolomitok.html" title="Ugrás a 4 napos Dolomitok Expedíció oldalára">
+        <i class="fa-solid fa-mountain"></i> <strong>Dolomitok 4D</strong>
+      </a>
+      <a href="#logisztika" style="color: #cbd5e1; font-weight: normal; margin-left: 0.8rem;">
+        <i class="fa-solid fa-phone-volume" style="color: #ef4444;"></i> SOS: <strong>140</strong>
+      </a>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       STICKY DESKTOP NAVIGATION BAR
+       ========================================================================== -->
+  <nav class="main-nav" id="mainNav">
+    <div class="nav-container">
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="../index.html" class="nav-home-btn" title="Vissza a LordTúra Kezdőlapra" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.35rem 0.75rem;background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);border-radius:9999px;text-decoration:none;font-size:0.82rem;font-weight:600;">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Kezdőlap</span>
+        </a>
+        <a href="#" class="nav-brand">
+          <img src="favicon.svg" alt="Dürre Wand Logo">
+          <div>
+            <span>DÜRRE WAND</span>
+            <span class="brand-sub">PLATTENSTEIN 1154 M</span>
+          </div>
+        </a>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#terkep" class="nav-link"><i class="fa-solid fa-map"></i> Térkép & Útvonal</a></li>
+        <li><a href="#szintrajz" class="nav-link"><i class="fa-solid fa-chart-area"></i> Szintrajz</a></li>
+        <li><a href="#menetrend" class="nav-link"><i class="fa-regular fa-clock"></i> Menetrend</a></li>
+        <li><a href="#fotok" class="nav-link"><i class="fa-solid fa-camera"></i> Képek</a></li>
+        <li><a href="#felszereles" class="nav-link"><i class="fa-solid fa-list-check"></i> Felszerelés</a></li>
+        <li><a href="#logisztika" class="nav-link"><i class="fa-solid fa-circle-info"></i> Logisztika</a></li>
+        <li><a href="#idojaras" class="nav-link"><i class="fa-solid fa-cloud-sun"></i> Időjárás</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="plattenstein.gpx" download="durrewand_plattenstein.gpx" class="btn-gpx-quick">
+          <i class="fa-solid fa-download"></i> GPX Letöltés
+        </a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü megnyitása">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       HERO SECTION WITH PHOTO CAROUSEL
+       ========================================================================== -->
+  <header class="hero" id="hero">
+    <!-- Dynamic background slideshow -->
+    <div class="hero-bg-container" id="heroBgSlides"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fa-solid fa-location-dot"></i> Alsó-Ausztria &bull; Gutensteini-Alpok &bull; 2026. szept. 26.
+      </div>
+
+      <h1 class="hero-title">
+        DÜRRE WAND & <span>PLATTENSTEIN</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Egynapos panorámatúra a népszerű Hohe Wand szomszédságában: vad mészkőszirtek, a Wurzelsteig kaptatója, a Tablerhöhle barlang és az 1908-ban alapított Gauermannhütte a Schneeberg lenyűgöző díszletével.
+      </p>
+
+      <!-- DIAVETÍTÉS VEZÉRLŐSÁV (Középre zárt elrendezés a Dolomitok stílusában) -->
+      <div class="hero-controls-wrapper">
+        <div class="hero-carousel-controls" aria-label="Háttér diavetítés vezérlők">
+          <!-- Előző gomb -->
+          <button type="button" class="hero-ctrl-btn" id="heroPrevBtn" title="Előző kép" aria-label="Előző kép">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <!-- Aktuális fotó helyszíne és leírása -->
+          <div class="hero-photo-tag" id="heroPhotoTag" role="button" tabindex="0" title="Kattints a következő képhez!">
+            <i class="fa-solid fa-camera"></i>
+            <span id="heroCaptionText">Betöltés...</span>
+            <span class="hero-tag-badge" id="heroTagBadge">Helyszín</span>
+          </div>
+
+          <!-- Következő gomb -->
+          <button type="button" class="hero-ctrl-btn" id="heroNextBtn" title="Következő kép" aria-label="Következő kép">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <!-- Szünet / Lejátszás -->
+          <button type="button" class="hero-ctrl-btn hero-pause-btn" id="heroPlayPauseBtn" title="Diavetítés megállítása / indítása" aria-label="Szünet / Indítás">
+            <i class="fa-solid fa-pause"></i>
+          </button>
+        </div>
+
+        <!-- Lapozó indikátor pontok (szintén középre igazítva) -->
+        <div class="hero-indicators" id="heroDots"></div>
+      </div>
+
+      <!-- Quick Stats Ribbon -->
+      <div class="hero-stats-ribbon">
+        <div class="stat-card">
+          <i class="fa-solid fa-route icon" style="color: #34d399;"></i>
+          <span class="value">9.1 km</span>
+          <span class="label">Távolság (Kör)</span>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-arrow-trend-up icon" style="color: #10b981;"></i>
+          <span class="value">+656 m</span>
+          <span class="label">Szintkülönbség</span>
+        </div>
+        <div class="stat-card">
+          <i class="fa-regular fa-clock icon" style="color: #fbbf24;"></i>
+          <span class="value">3.5–4.5 h</span>
+          <span class="label">Időtartam</span>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-mountain icon" style="color: #f59e0b;"></i>
+          <span class="value">1 154 m</span>
+          <span class="label">Plattenstein</span>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-utensils icon" style="color: #06b6d4;"></i>
+          <span class="value">Hütte NYITVA</span>
+          <span class="label">Gauermannhütte</span>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-shoe-prints icon" style="color: #a7f3d0;"></i>
+          <span class="value">Közepes</span>
+          <span class="label">Nehézség (T2)</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="hero-actions">
+        <a href="#terkep" class="btn btn-primary">
+          <i class="fa-solid fa-map-location-dot"></i> Térkép & Szintrajz
+        </a>
+        <a href="#menetrend" class="btn btn-secondary">
+          <i class="fa-regular fa-calendar-check"></i> Menetrend (Szept 26.)
+        </a>
+        <a href="plattenstein.gpx" download="durrewand_plattenstein.gpx" class="btn btn-amber">
+          <i class="fa-solid fa-file-arrow-down"></i> GPX Letöltése
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         1. INTERACTIVE MAP & ELEVATION PROFILE
+         ========================================================================== -->
+    <section class="section" id="terkep">
+      <div class="section-header">
+        <span class="section-badge"><i class="fa-solid fa-map-pin"></i> Útvonal & Domborzat</span>
+        <h2 class="section-title">Interaktív Túratérkép & GPS Nyomvonal</h2>
+        <p class="section-subtitle">
+          9.1 km-es körtúra Miesenbach (Frohnberg) faluból a Wurzelsteig gerincén át a Plattenstein csúcsra (1154 m), majd az Ochsenweg és a Schwaighofer-tanya érintésével vissza.
+        </p>
+      </div>
+
+      <div class="map-elevation-grid">
+        <!-- Map Card -->
+        <div class="map-card">
+          <div class="map-control-bar">
+            <!-- Szakasz szűrők -->
+            <div class="filter-group">
+              <span class="filter-label">Szakaszok:</span>
+              <button class="filter-btn stage-filter-btn active" data-stage="all">
+                <i class="fa-solid fa-route"></i> Teljes Kör (9.1 km)
+              </button>
+              <button class="filter-btn stage-filter-btn" data-stage="climb">
+                <i class="fa-solid fa-person-hiking"></i> 1. Kaptató (Wurzelsteig)
+              </button>
+              <button class="filter-btn stage-filter-btn" data-stage="summit">
+                <i class="fa-solid fa-mountain"></i> 2. Csúcs & Menedékház
+              </button>
+              <button class="filter-btn stage-filter-btn" data-stage="descent">
+                <i class="fa-solid fa-person-walking-arrow-right"></i> 3. Ereszkedés (Ochsenweg)
+              </button>
+            </div>
+
+            <!-- Pontok szerinti szűrők -->
+            <div class="filter-group">
+              <span class="filter-label">Pontok:</span>
+              <button class="filter-btn poi-filter-btn active" data-poi="all">Összes pont</button>
+              <button class="filter-btn poi-filter-btn" data-poi="highlights">
+                <i class="fa-solid fa-star"></i> Kiemelt (Csúcs/Hütte)
+              </button>
+              <button class="filter-btn poi-filter-btn" data-poi="viewpoints">
+                <i class="fa-solid fa-binoculars"></i> Kilátók & Barlang
+              </button>
+            </div>
+          </div>
+
+          <!-- Térkép Vászon -->
+          <div class="map-canvas-container">
+            <div id="routeMap"></div>
+
+            <!-- Lebegő Jelmagyarázat -->
+            <div class="map-legend">
+              <h5>Jelmagyarázat</h5>
+              <div class="legend-item">
+                <div class="legend-line" style="background: #10b981;"></div>
+                <span>Dürre Wand Körtúra (9.1 km)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot-marker" style="background: #f59e0b;"></div>
+                <span>Plattenstein Csúcs (1 154 m)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot-marker" style="background: #f97316;"></div>
+                <span>Gauermannhütte (1 144 m)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot-marker" style="background: #3b82f6;"></div>
+                <span>Start & Cél: Frohnberg</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot-marker" style="background: #06b6d4;"></div>
+                <span>Panorámapontok & Barlang</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Elevation Profile Card -->
+        <div class="elevation-card" id="szintrajz">
+          <div class="card-topbar">
+            <div class="card-title">
+              <i class="fa-solid fa-chart-line" style="color: #34d399;"></i> Valós Geodéziai Magasságprofil & Élő Kurzor
+            </div>
+            <div style="font-size: 0.85rem; color: #94a3b8;">
+              <i class="fa-solid fa-hand-pointer"></i> Húzd az egeret vagy ujjadat a szintrajzon az élő térkép-követéshez!
+            </div>
+          </div>
+
+          <div class="elevation-container">
+            <div class="elevation-svg-wrapper">
+              <svg id="elevationSvg"></svg>
+              <div class="profile-tooltip" id="profileTooltip"></div>
+            </div>
+
+            <div class="elevation-legend">
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #10b981;"></span>
+                <span>Zöld lejtő / gerinc</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #f59e0b;"></span>
+                <span>Plattenstein Csúcs (1 154 m)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #3b82f6;"></span>
+                <span>Start & Cél: Frohnberg (575 m)</span>
+              </div>
+              <div class="legend-item" style="margin-left: auto;">
+                <span style="color: #cbd5e1;">Szintemelkedés: <strong>+656 m</strong> | Ereszkedés: <strong>-656 m</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         2. DAY SCHEDULE / TIMELINE (2026. SZEPTEMBER 26.)
+         ========================================================================== -->
+    <section class="section" id="menetrend">
+      <div class="section-header">
+        <span class="section-badge"><i class="fa-solid fa-calendar-day"></i> Időrend & Forgatókönyv</span>
+        <h2 class="section-title">Napi Menetrend • 2026. Szeptember 26.</h2>
+        <p class="section-subtitle">
+          Részletes, órára bontott útiterv a budapesti indulástól a csúcsélményen és menedékházi ebéden át a kényelmes hazaérkezésig.
+        </p>
+      </div>
+
+      <div class="timeline-wrap" id="timelineContainer">
+        <!-- Injected via JavaScript from data.js -->
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         3. PHOTO GALLERY & HIGHLIGHTS
+         ========================================================================== -->
+    <section class="section" id="fotok">
+      <div class="section-header">
+        <span class="section-badge"><i class="fa-solid fa-images"></i> Képes Útibeszámoló</span>
+        <h2 class="section-title">A Túra Képekben</h2>
+        <p class="section-subtitle">
+          Kattints bármelyik fotóra a teljes méretű, nagyfelbontású megtekintéshez és a helyszíni leíráshoz!
+        </p>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Injected via JavaScript from data.js -->
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         4. PACKING CHECKLIST
+         ========================================================================== -->
+    <section class="section" id="felszereles">
+      <div class="section-header">
+        <span class="section-badge"><i class="fa-solid fa-backpack"></i> Felkészülés & Ellenőrzés</span>
+        <h2 class="section-title">Interaktív Csomagolólista</h2>
+        <p class="section-subtitle">
+          Pipáld ki a már bepakolt tárgyakat! A rendszer automatikusan megjegyzi a böngésződben az állapotot.
+        </p>
+        <div style="margin-top: 14px;">
+          <span class="badge" id="packedCount" style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: #34d399; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 0.9rem;">
+            0 / 18 becsomagolva
+          </span>
+        </div>
+      </div>
+
+      <div class="checklist-grid" id="checklistContainer">
+        <!-- Injected via JavaScript from data.js -->
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         5. LIVE WEATHER & CONDITIONS
+         ========================================================================== -->
+    <section class="section" id="idojaras">
+      <div class="section-header">
+        <span class="section-badge"><i class="fa-solid fa-cloud-sun-rain"></i> Meteorológia</span>
+        <h2 class="section-title">Helyi Időjárás & Körülmények</h2>
+        <p class="section-subtitle">
+          Élő műholdas és mérőállomás adatok Miesenbach és a Plattenstein körzetéből (Open-Meteo API).
+        </p>
+      </div>
+
+      <div class="weather-card">
+        <div class="weather-header">
+          <div class="weather-location">
+            <i class="fa-solid fa-cloud-sun icon"></i>
+            <div>
+              <h3>Miesenbach / Plattenstein (1 154 m)</h3>
+              <p>Gutensteini-Alpok &bull; Alsó-Ausztria</p>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div id="liveTemp" style="font-size: 2.2rem; font-weight: 900; color: #f59e0b;">-- °C</div>
+            <div id="liveDesc" style="color: #94a3b8; font-size: 0.9rem;">Adatok lekérése...</div>
+          </div>
+        </div>
+
+        <div class="weather-grid-stats">
+          <div class="wstat-box">
+            <div class="lbl"><i class="fa-solid fa-wind"></i> Szélsebesség</div>
+            <div class="val" id="liveWind">-- km/h</div>
+          </div>
+          <div class="wstat-box">
+            <div class="lbl"><i class="fa-solid fa-cloud-rain"></i> Csapadék</div>
+            <div class="val" id="liveRain">0.0 mm</div>
+          </div>
+          <div class="wstat-box">
+            <div class="lbl"><i class="fa-regular fa-compass"></i> Túraidőszak</div>
+            <div class="val" style="font-size: 1.1rem; color: #34d399;">Szept. 26.</div>
+          </div>
+          <div class="wstat-box">
+            <div class="lbl"><i class="fa-solid fa-mountain"></i> Csúcshőmérséklet</div>
+            <div class="val" style="font-size: 1.1rem; color: #fbbf24;">~12 - 16 °C</div>
+          </div>
+        </div>
+
+        <div class="weather-sept-note">
+          <i class="fa-solid fa-circle-info" style="color: #10b981; margin-right: 8px;"></i>
+          <strong>Szeptember végi hegyi időjárási tipp:</strong> A reggeli órákban a völgyben hűvös (8–10 °C) idő várható, délben a nyílt gerincen kellemes 14–18 °C. A csúcson és a gerincélen szél esetén a hőérzet alacsonyabb lehet, ezért szélálló kabát és egy meleg réteg viselése kötelező!
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         6. LOGISTICS, HUTS & SAFETY
+         ========================================================================== -->
+    <section class="section" id="logisztika">
+      <div class="section-header">
+        <span class="section-badge"><i class="fa-solid fa-compass-drafting"></i> Gyakorlati Tudnivalók</span>
+        <h2 class="section-title">Logisztika, Hütték & Alpesi Biztonság</h2>
+        <p class="section-subtitle">
+          Minden fontos információ az autós megközelítésről, a Gauermannhütte nyitvatartásáról és a vészhelyzeti protokollról.
+        </p>
+      </div>
+
+      <div class="logistics-grid">
+        <!-- Car Travel Card -->
+        <div class="info-card">
+          <div class="info-card-header">
+            <i class="fa-solid fa-car-side"></i> Autós Megközelítés
+          </div>
+          <p>
+            <strong>Távolság:</strong> kb. 260 km Budapesttől (kb. 2 óra 45 perc menetidő).<br>
+            <strong>Útvonal:</strong> Budapest (M1) ➔ Hegyeshalom ➔ A4 Bécs felé ➔ A3 / S4 Wiener Neustadt ➔ B26 Puchberg felé ➔ L138 Miesenbach ➔ Frohnberg.
+          </p>
+          <p>
+            <strong>Osztrák Autópálya-matrica:</strong> Ausztriában kötelező a matrica. 2024 óta kapható <strong>1 napos digitális matrica</strong> (kb. 8.60 €) az <a href="https://shop.asfinag.at" target="_blank" rel="noopener" style="color: #34d399;">asfinag.at</a> oldalon azonnali érvényességgel, vagy a határ előtti kutakon 10 napos matrica (kb. 11.50 €).
+          </p>
+          <p>
+            <strong>Parkolás:</strong> Frohnbergben a falu végén található turistaparkoló <strong>ingyenes</strong> (Gasthof Michlwirt felett, 575 m).
+          </p>
+          <div style="margin-top: 14px;">
+            <a href="https://maps.google.com/?q=47.857731,15.975154" target="_blank" rel="noopener" class="btn btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">
+              <i class="fa-brands fa-google"></i> Útvonaltervezés ide (Google Maps)
+            </a>
+          </div>
+        </div>
+
+        <!-- Gauermannhütte Card -->
+        <div class="info-card">
+          <div class="info-card-header">
+            <i class="fa-solid fa-utensils"></i> Gauermannhütte (1154 m)
+          </div>
+          <p>
+            <strong>Története:</strong> Az 1908-ban megnyitott, idilli faház az <em>Österreichischer Touristenklub (ÖTK)</em> menedékháza, közvetlenül a Plattenstein csúcsán.
+          </p>
+          <p>
+            <strong>Nyitvatartás:</strong> Május 1-től október végéig <strong>szombaton, vasárnap és ünnepnapokon nyitva</strong>! 2026. szeptember 26. SZOMBAT, tehát a menedékház nyitva tart és meleg ételekkel vár.
+          </p>
+          <p>
+            <strong>Étlap & Kínálat:</strong> Meleg levesek (Gulaschsuppe, Kaspressknödel), virsli mustárral, házi sütemények, kávé, teák, csapolt osztrák sörök.
+          </p>
+          <p style="color: #f87171; font-weight: 700;">
+            <i class="fa-solid fa-triangle-exclamation"></i> FIZETÉS: KIZÁRÓLAG KÉSZPÉNZBEN (Euro €)! Bankkártyás terminál nincs a csúcson!
+          </p>
+        </div>
+
+        <!-- Emergency / SOS Card -->
+        <div class="info-card sos-card">
+          <div class="info-card-header">
+            <i class="fa-solid fa-truck-medical"></i> Alpesi Segélyhívók (Ausztria)
+          </div>
+          <p>
+            Baleset vagy rosszullét esetén az osztrák hegyimentők közvetlenül és felkészülten hívhatók. A telefonos hívásnál add meg: <em>Ki vagy, hol vagy (Plattenstein / Wurzelsteig), mi történt, hány sérült van, időjárás a helyszínen</em>.
+          </p>
+          
+          <div class="sos-buttons-wrap">
+            <a href="tel:140" class="sos-btn">
+              <div>🚨 140</div>
+              <span>Osztrák Hegyi Mentők<br>(Bergrettung)</span>
+            </a>
+            <a href="tel:112" class="sos-btn" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); box-shadow: 0 4px 15px rgba(37,99,235,0.3);">
+              <div>📞 112</div>
+              <span>Európai Általános<br>Segélyhívó</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       PHOTO LIGHTBOX MODAL
+       ========================================================================== -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Bezárás">&times;</button>
+      <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrev" aria-label="Előző kép">&#10094;</button>
+      <button class="lightbox-nav-btn lightbox-next" id="lightboxNext" aria-label="Következő kép">&#10095;</button>
+      <img src="" alt="" class="lightbox-img" id="lightboxImg">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MOBILE OFF-CANVAS DRAWER & BACKDROP
+       ========================================================================== -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">🌲 Dürre Wand Menü</div>
+      <button class="drawer-close-btn" id="drawerCloseBtn">&times;</button>
+    </div>
+
+    <ul class="drawer-links">
+      <li><a href="#terkep" class="drawer-link"><i class="fa-solid fa-map"></i> Térkép & Útvonal</a></li>
+      <li><a href="#szintrajz" class="drawer-link"><i class="fa-solid fa-chart-area"></i> Szintrajz</a></li>
+      <li><a href="#menetrend" class="drawer-link"><i class="fa-regular fa-clock"></i> Napi Menetrend</a></li>
+      <li><a href="#fotok" class="drawer-link"><i class="fa-solid fa-camera"></i> Képgaléria</a></li>
+      <li><a href="#felszereles" class="drawer-link"><i class="fa-solid fa-list-check"></i> Felszerelés</a></li>
+      <li><a href="#logisztika" class="drawer-link"><i class="fa-solid fa-circle-info"></i> Logisztika</a></li>
+      <li><a href="#idojaras" class="drawer-link"><i class="fa-solid fa-cloud-sun"></i> Időjárás</a></li>
+      <li style="margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">
+        <a href="/" class="drawer-link" style="color: #34d399;"><i class="fa-solid fa-arrow-left"></i> Dolomitok Expedíció</a>
+      </li>
+    </ul>
+
+    <div style="margin-top: auto; padding-top: 20px;">
+      <a href="tel:140" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #ef4444; color: #fff; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 800;">
+        <i class="fa-solid fa-phone"></i> Hegyi Mentők: 140
+      </a>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MOBILE BOTTOM NAVIGATION BAR
+       ========================================================================== -->
+  <nav class="mobile-bottom-bar">
+    <a href="#terkep" class="mb-btn"><i class="fa-solid fa-map"></i><span>Térkép</span></a>
+    <a href="#szintrajz" class="mb-btn"><i class="fa-solid fa-chart-line"></i><span>Szintrajz</span></a>
+    <a href="#menetrend" class="mb-btn"><i class="fa-regular fa-clock"></i><span>Menetrend</span></a>
+    <a href="#felszereles" class="mb-btn"><i class="fa-solid fa-list-check"></i><span>Pakolás</span></a>
+    <a href="plattenstein.gpx" download="durrewand.gpx" class="mb-btn" style="color: #10b981;"><i class="fa-solid fa-download"></i><span>GPX</span></a>
+  </nav>
+
+  <!-- Lebegő Gomb: Gyors ugrás a térképhez / tetejére -->
+  <button class="floating-map-jump-btn" id="floating-map-jump-btn" onclick="scrollToMapOrTop()" title="Ugrás a térképhez" aria-label="Ugrás a térképhez">
+    <i class="fa-solid fa-map"></i>
+  </button>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">🏔️ Dürre Wand &bull; Plattenstein (1154 m)</div>
+      <p>Egynapos alpesi körtúra &bull; 2026. szeptember 26. &bull; Alsó-Ausztria (Gutensteini-Alpok)</p>
+
+      <ul class="footer-links">
+        <li><a href="#terkep">Térkép</a></li>
+        <li><a href="#szintrajz">Szintrajz</a></li>
+        <li><a href="#menetrend">Menetrend</a></li>
+        <li><a href="#fotok">Fotók</a></li>
+        <li><a href="#felszereles">Csomagolás</a></li>
+        <li><a href="#logisztika">Logisztika</a></li>
+        <li><a href="/">Dolomitok Expedíció Főoldal</a></li>
+      </ul>
+
+      <p style="font-size: 0.8rem; color: #64748b; margin-top: 16px;">
+        Forrás & leírás: <a href="https://kirandulastippek.hu/semmering-schneeberg-es-kornyeke/durre-wand-tura-a-plattenstein-panoramahegyere" target="_blank" rel="noopener" style="color: #94a3b8;">KirándulásTippek.hu</a> &bull; GPX nyomvonal: Mapy.cz &bull; Térképi réteg: OpenTopoMap & OpenStreetMap.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+
+  <!-- Application Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

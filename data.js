@@ -3,8 +3,8 @@
 
 const EXPEDITION_DATA = {
   "overview": {
-    "title": "Dolomitok Expedíció",
-    "subtitle": "4 Napos Prémium Kalandterv (10 fős csapat: 4 mászó & 6 kiránduló)",
+    "title": "LordTúra",
+    "subtitle": "Prémium Hegyi Expedíciók & Kalandtervek",
     "baseLocation": "Cortina d'Ampezzo és környéke (4 éjszaka)",
     "team": {
       "total": 10,

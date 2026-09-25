@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>LordTúra – Hegyi Kalandok &amp; Expedíciók Portál</title>
+  <meta name="description" content="LordTúra: Dinamikus, interaktív túra- és hegyi expedíciós portál. Via ferraták, panorámatúrák, élő térkép, szintrajzok, időjárás, költségvetés és logisztika.">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Content Security Policy (CSP): Engedélyezi a szükséges forrásokat és az unsafe-eval-t a térképhez, stream lejátszókhoz és dinamikus elemekhez -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' blob: data: https:; connect-src 'self' https:; frame-src 'self' https://*.panomax.com https://*.panocloud.webcam https://*.foto-webcam.eu https:; worker-src 'self' blob:;">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Pro Icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Egyedi Stíluslap -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- TOP CROSS-TOUR NAVIGATION BAR -->
+  <div style="background: linear-gradient(90deg, #064e3b, #0f172a 50%, #064e3b); border-bottom: 1px solid rgba(16, 185, 129, 0.3); padding: 7px 16px; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; z-index: 10000; position: relative;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Új Túra</span>
+      <span style="color: #cbd5e1;">Bécsi-Alpok &bull; 2026. szeptember 26.</span>
+    </div>
+    <a href="/durrewand/" style="color: #34d399; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='#a7f3d0'" onmouseout="this.style.color='#34d399'">
+      <span>🌲 Dürre Wand &amp; Plattenstein (1154 m) Túra</span>
+      <i class="fa-solid fa-arrow-right-long"></i>
+    </a>
+  </div>
+
+  <!-- HERO SZEKCIÓ -->
+  <!-- HERO SZEKCIÓ (DINAMIKUS DIAVETÍTÉSSEL & VIDEÓ HÁTTÉRREL) -->
+  <header class="hero" id="hero-header">
+    <!-- HÁTTÉR DIAVETÍTÉS & VIDEÓ RÉTEGEK -->
+    <div class="hero-media-wrapper" id="hero-media-wrapper" aria-hidden="true">
+      <div class="hero-slides-container" id="hero-slides-container">
+        <!-- Slide 1: Cadini di Misurina -->
+        <div class="hero-slide active" data-index="0" data-location="Cadini di Misurina" data-info="Sentiero Bonacossa kilátópont (2 336 m)" data-badge="2. Nap Túrázó" data-day="2" style="background-image: url('cadini_di_misurina.jpg');"></div>
+        <!-- Slide 2: Tre Cime di Lavaredo -->
+        <div class="hero-slide" data-index="1" data-location="Tre Cime di Lavaredo" data-info="Drei Zinnen &amp; Rifugio Locatelli (2 441 m)" data-badge="2. Nap Bónusz" data-day="2" style="background-image: url('hero_tre_cime.jpg');"></div>
+        <!-- Slide 3: Seceda & Odle gerinc -->
+        <div class="hero-slide" data-index="2" data-location="Seceda &amp; Odle fűrészgerinc" data-info="Val Gardena ikonikus gerince (2 519 m)" data-badge="4. Nap Közös" data-day="4" style="background-image: url('hero_seceda.jpg');"></div>
+        <!-- Slide 4: Lago di Braies -->
+        <div class="hero-slide" data-index="3" data-location="Lago di Braies" data-info="Pragser Wildsee smaragdzöld tengerszem (1 496 m)" data-badge="3. Nap Közös" data-day="3" style="background-image: url('hero_braies.jpg');"></div>
+        <!-- Slide 5: Passo Sella & Sassolungo -->
+        <div class="hero-slide" data-index="4" data-location="Passo Sella &amp; Sassolungo" data-info="Città dei Sassi &amp; Langkofel fal (2 240 m)" data-badge="3. Nap Túrázó" data-day="3" style="background-image: url('hero_passo_sella.jpg');"></div>
+        <!-- Slide 6: Val di Funes & Santa Maddalena -->
+        <div class="hero-slide" data-index="5" data-location="Val di Funes &amp; Ranui" data-info="Santa Maddalena &amp; Odle háttér (1 385 m)" data-badge="4. Nap Túrázó" data-day="4" style="background-image: url('hero_val_di_funes.jpg');"></div>
+        <!-- Slide 7: Lago di Misurina -->
+        <div class="hero-slide" data-index="6" data-location="Lago di Misurina" data-info="Part menti séta &amp; Sorapiss panoráma (1 756 m)" data-badge="1. Nap Közös" data-day="1" style="background-image: url('hero_misurina.jpg');"></div>
+        <!-- Slide 8: Tofana di Rozes & Cortina -->
+        <div class="hero-slide" data-index="7" data-location="Tofana di Rozes &amp; Cortina" data-info="Punta Fiames &amp; Cortina bázis (2 240 m)" data-badge="1. Nap Mászó" data-day="1" style="background-image: url('hero_tofana.jpg');"></div>
+      </div>
+
+      <!-- HÁTTÉR VIDEÓ RÉTEG -->
+      <div class="hero-video-container" id="hero-video-container">
+        <video id="hero-video-player" class="hero-bg-video" autoplay muted loop playsinline preload="auto">
+          <source src="hero_dolomites_loop.mp4" type="video/mp4">
+          <source src="hero_dolomites_loop.webm" type="video/webm">
+        </video>
+      </div>
+
+      <!-- SÖTÉTÍTŐ ÉS GRADIENS ÁTFEDÉSEK -->
+      <div class="hero-media-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge-group">
+        <span class="badge badge-primary"><i class="fa-solid fa-mountain"></i> 4 Napos Expedíció</span>
+        <span class="badge badge-climber"><i class="fa-solid fa-person-hiking"></i> B, C / D Via Ferraták</span>
+        <span class="badge badge-hiker"><i class="fa-solid fa-shoe-prints"></i> Közepes Panorámatúrák</span>
+        <span class="badge badge-joint"><i class="fa-solid fa-campground"></i> Cortina Bázis</span>
+        <span class="badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;border:1px solid rgba(56,189,248,0.4);"><i class="fa-solid fa-chart-area"></i> 12 Valós Szintrajz</span>
+      </div>
+
+      <h1 class="hero-title">LordTúra: Hegyi Kalandok &amp; Expedíciók</h1>
+      <p class="hero-subtitle">
+        Prémium hegyi expedíciók, via ferraták és túratervek. 4 napos alpesi kalandterv Cortina d'Ampezzó bázissal (sziklamászók &amp; panorámatúrázók/fotósok) logisztikailag összehangolt programokkal és találkozókkal.
+      </p>
+
+      <!-- DIAVETÍTÉS & VIDEÓ VEZÉRLŐSÁV -->
+      <div class="hero-controls-wrapper">
+        <div class="hero-carousel-controls" aria-label="Háttér diavetítés vezérlők">
+          <!-- Előző gomb -->
+          <button type="button" class="hero-ctrl-btn" id="hero-prev-btn" title="Előző túrahelyszín (Balra nyíl)" aria-label="Előző kép">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <!-- Aktuális helyszín információs sáv (Kattintásra odaugrik a túrához) -->
+          <div class="hero-photo-tag" id="hero-photo-tag" role="button" tabindex="0" title="Kattints a helyszín túrájának megtekintéséhez a térképen!">
+            <i class="fa-solid fa-camera" id="hero-photo-tag-icon"></i>
+            <span id="hero-photo-tag-text">Helyszín: <strong>Cadini di Misurina</strong> &bull; Sentiero Bonacossa kilátópont (2 336 m)</span>
+            <span class="hero-tag-badge" id="hero-tag-badge">2. Nap</span>
+          </div>
+
+          <!-- Következő gomb -->
+          <button type="button" class="hero-ctrl-btn" id="hero-next-btn" title="Következő túrahelyszín (Jobbra nyíl)" aria-label="Következő kép">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <!-- Szünet / Lejátszás -->
+          <button type="button" class="hero-ctrl-btn hero-pause-btn" id="hero-play-pause-btn" title="Diavetítés megállítása / indítása" aria-label="Szünet / Indítás">
+            <i class="fa-solid fa-pause"></i>
+          </button>
+
+          <!-- Drónvideó Mód Váltó -->
+          <button type="button" class="hero-ctrl-btn hero-video-toggle-btn" id="hero-video-toggle-btn" title="Alpesi drónvideó háttér be-/kikapcsolása">
+            <i class="fa-solid fa-film"></i>
+            <span class="video-btn-label">Drónvideó</span>
+          </button>
+        </div>
+
+        <!-- Helyszín Pagináció Pontok -->
+        <div class="hero-indicators" id="hero-indicators" role="tablist" aria-label="Túrahelyszínek váltása"></div>
+      </div>
+
+      <!-- Statisztikai kártyák -->
+      <div class="hero-stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon climber">
+            <i class="fa-solid fa-person-hiking"></i>
+          </div>
+          <div class="stat-info">
+            <h4>Mászó Csapat (4 fő)</h4>
+            <p>Punta Fiames, Monte Paterno, Pisciadù, Piccolo Cir</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon hiker">
+            <i class="fa-solid fa-shoe-prints"></i>
+          </div>
+          <div class="stat-info">
+            <h4>Túrázó Csapat (6 fő)</h4>
+            <p>Tofana, Cadini kilátó, Sella &amp; Braies, Seceda</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon base">
+            <i class="fa-solid fa-hotel"></i>
+          </div>
+          <div class="stat-info">
+            <h4>Cortina d'Ampezzo</h4>
+            <p>Közös bázis apartman 4 éjszakára</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon joint">
+            <i class="fa-solid fa-camera-retro"></i>
+          </div>
+          <div class="stat-info">
+            <h4>Ikonikus Látvány</h4>
+            <p>Tre Cime, Braies-tó, Seceda fűrészgerinc</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- FŐ NAVIGÁCIÓ -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <div class="nav-brand-group">
+        <a href="index.html" class="nav-home-btn" title="Vissza a LordTúra Kezdőlapra" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.8rem;background:rgba(56,189,248,0.15);color:var(--accent-blue);border:1px solid rgba(56,189,248,0.3);border-radius:var(--radius-full);text-decoration:none;font-size:0.85rem;font-weight:600;transition:var(--transition);margin-right:0.3rem;">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Kezdőlap</span>
+        </a>
+        <a href="durrewand/index.html" class="nav-home-btn" title="Ugrás a Plattenstein (Dürre Wand) túrára" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.8rem;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-full);text-decoration:none;font-size:0.85rem;font-weight:600;transition:var(--transition);margin-right:0.5rem;">
+          <i class="fa-solid fa-tree"></i>
+          <span>Plattenstein</span>
+        </a>
+        <a href="#hero-header" class="nav-brand" id="nav-brand-logo" title="Dolomitok Expedíció">
+          <i class="fa-solid fa-mountain"></i>
+          <span>Dolomitok 4D</span>
+        </a>
+      </div>
+
+      <div class="nav-actions-mobile">
+        <a href="tel:118" class="mobile-sos-chip" title="Olasz Hegyi Mentők: 118">
+          <i class="fa-solid fa-truck-medical"></i> SOS 118
+        </a>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menü megnyitása">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-section="tours-section">
+          <i class="fa-solid fa-map-location-dot"></i> Túrák &amp; Térkép
+        </button>
+        <button class="nav-tab" data-section="timeline-section">
+          <i class="fa-solid fa-timeline"></i> Napi Időrend
+        </button>
+        <button class="nav-tab" data-section="weather-section">
+          <i class="fa-solid fa-cloud-sun-rain"></i> Időjárás &amp; Webkam
+        </button>
+        <button class="nav-tab" data-section="huts-section">
+          <i class="fa-solid fa-house-chimney-window"></i> Hütték &amp; Gasztro
+        </button>
+        <button class="nav-tab" data-section="budget-section">
+          <i class="fa-solid fa-calculator"></i> Költségvetés
+        </button>
+        <button class="nav-tab" data-section="checklist-section">
+          <i class="fa-solid fa-list-check"></i> Felszerelés
+        </button>
+        <button class="nav-tab" data-section="gpx-section">
+          <i class="fa-solid fa-file-arrow-down"></i> GPX Letöltések
+        </button>
+        <button class="nav-tab" data-section="logistics-section">
+          <i class="fa-solid fa-square-parking"></i> Logisztika &amp; Parkolás
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBIL OLDALSÓ MENÜ (DRAWER) & HÁTTÉR MASZK -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobil oldalsó navigáció">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <i class="fa-solid fa-mountain-sun" style="color:var(--accent-blue);"></i>
+        <div>
+          <h4>LordTúra</h4>
+          <span>Hegyi Kalandok &bull; Expedíciók</span>
+        </div>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Menü bezárása">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="drawer-section-title">Navigáció</div>
+      <nav class="drawer-nav">
+        <a href="index.html" class="drawer-nav-item" style="color:var(--accent-blue);font-weight:600;text-decoration:none;">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>← Vissza a Kezdőlapra</span>
+        </a>
+        <a href="durrewand/index.html" class="drawer-nav-item" style="color:#34d399;font-weight:600;text-decoration:none;">
+          <i class="fa-solid fa-tree"></i>
+          <span>🌲 Dürre Wand &amp; Plattenstein (1154 m)</span>
+        </a>
+        <button class="drawer-nav-item active" data-section="tours-section">
+          <i class="fa-solid fa-map-marked-alt"></i>
+          <span>Napi Túrák &amp; Térkép</span>
+        </button>
+        <button class="drawer-nav-item" data-section="timeline-section">
+          <i class="fa-solid fa-timeline"></i>
+          <span>Napi Időrend &amp; Találkozók</span>
+        </button>
+        <button class="drawer-nav-item" data-section="weather-section">
+          <i class="fa-solid fa-cloud-sun-rain"></i>
+          <span>Élő Időjárás &amp; Webkamerák</span>
+        </button>
+        <button class="drawer-nav-item" data-section="huts-section">
+          <i class="fa-solid fa-house-chimney-window"></i>
+          <span>Hütték &amp; Gasztro Kalauz</span>
+        </button>
+        <button class="drawer-nav-item" data-section="budget-section">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Költségvetés Számoló</span>
+        </button>
+        <button class="drawer-nav-item" data-section="checklist-section">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Felszerelés Csekklista</span>
+        </button>
+        <button class="drawer-nav-item" data-section="gpx-section">
+          <i class="fa-solid fa-file-arrow-down"></i>
+          <span>GPX Nyomvonalak (12 db)</span>
+        </button>
+        <button class="drawer-nav-item" data-section="logistics-section">
+          <i class="fa-solid fa-square-parking"></i>
+          <span>Logisztika &amp; Parkolási Kisokos</span>
+        </button>
+      </nav>
+
+      <div class="drawer-section-title">Gyors Ugrás a Napokra</div>
+      <div class="drawer-quick-days">
+        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(1)">
+          <span class="day-num">1</span>
+          <span>Cortina</span>
+        </button>
+        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(2)">
+          <span class="day-num">2</span>
+          <span>Tre Cime</span>
+        </button>
+        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(3)">
+          <span class="day-num">3</span>
+          <span>Pisciadù / Braies</span>
+        </button>
+        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(4)">
+          <span class="day-num">4</span>
+          <span>Seceda / Funes</span>
+        </button>
+      </div>
+
+      <div class="drawer-section-title">Alpesi Segélyhívás (SOS)</div>
+      <div class="drawer-sos-box">
+        <a href="tel:118" class="sos-btn emergency">
+          <i class="fa-solid fa-truck-medical"></i>
+          <div>
+            <strong>118 – Olasz Hegyi Mentők</strong>
+            <span>Soccorso Alpino (Dolomiti)</span>
+          </div>
+        </a>
+        <a href="tel:112" class="sos-btn general">
+          <i class="fa-solid fa-phone-volume"></i>
+          <div>
+            <strong>112 – Európai Segélyhívó</strong>
+            <span>Általános vészhelyzeti szám</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="drawer-info-box">
+        <div><i class="fa-solid fa-hotel" style="color:var(--accent-gold);"></i> <strong>Bázis:</strong> Cortina d'Ampezzo környéke</div>
+        <div><i class="fa-solid fa-users" style="color:var(--hiker-color);"></i> <strong>Csapat:</strong> 4 mászó &bull; 6 túrázó</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- FŐ TARTALOM KONTÉNER -->
+  <main class="main-container">
+
+    <!-- 1. SZEKCIÓ: NAPI TÚRÁK & INTERAKTÍV TÉRKÉP -->
+    <section id="tours-section" class="section active">
+      
+      <!-- INTERAKTÍV TÉRKÉP WIDGET -->
+      <div class="map-section-wrapper">
+        <div class="map-control-bar">
+          <!-- Nap szerinti szűrők -->
+          <div class="filter-group">
+            <span class="filter-label">Napok:</span>
+            <button class="filter-btn day-filter-btn active" data-day="all">Összes</button>
+            <button class="filter-btn day-filter-btn" data-day="1">1. Nap (Cortina)</button>
+            <button class="filter-btn day-filter-btn" data-day="2">2. Nap (Tre Cime)</button>
+            <button class="filter-btn day-filter-btn" data-day="3">3. Nap (Sella/Braies)</button>
+            <button class="filter-btn day-filter-btn" data-day="4">4. Nap (Seceda)</button>
+          </div>
+
+          <!-- Csapat szerinti szűrők -->
+          <div class="filter-group">
+            <span class="filter-label">Csapat:</span>
+            <button class="filter-btn team-filter-btn active" data-team="all">Mindkettő</button>
+            <button class="filter-btn team-filter-btn climber" data-team="climber">
+              <i class="fa-solid fa-person-hiking"></i> Mászók
+            </button>
+            <button class="filter-btn team-filter-btn hiker" data-team="hiker">
+              <i class="fa-solid fa-shoe-prints"></i> Túrázók
+            </button>
+            <button class="filter-btn team-filter-btn joint" data-team="joint">
+              <i class="fa-solid fa-users"></i> Közös
+            </button>
+          </div>
+        </div>
+
+        <!-- Térkép Vászon -->
+        <div class="map-canvas-container">
+          <div id="leaflet-map"></div>
+
+          <!-- Lebegő Jelmagyarázat -->
+          <div class="map-legend">
+            <h5>Jelmagyarázat</h5>
+            <div class="legend-item">
+              <div class="legend-line climber"></div>
+              <span>Mászó útvonalak (Ferraták)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-line hiker"></div>
+              <span>Túrázó panorámautak</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-line joint"></div>
+              <span>Közös délutáni programok</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Szekció bevezető -->
+      <div class="section-header">
+        <h2>Részletes Napi Programok &amp; Szintrajzok</h2>
+        <p>A két csapat párhuzamos útvonalai, valós geodéziai szintrajzai (interaktív magasságprofilok térkép-szinkronnal), technikai adatai és délutáni találkozási pontjai.</p>
+      </div>
+
+      <!-- Dinamikus Napi Kártyák Konténer -->
+      <div id="days-cards-container">
+        <!-- Javascript fogja legenerálni a 4 napot -->
+      </div>
+    </section>
+
+    <!-- 2. SZEKCIÓ: NAPI IDŐREND & TALÁLKOZÓK -->
+    <section id="timeline-section" class="section">
+      <div class="section-header">
+        <h2>Napi Időrend &amp; Logisztikai Találkozók</h2>
+        <p>Hogyan koordinál a 4 mászó és a 6 kiránduló reggeltől estig? Párhuzamos idővonal a találkozási pontokkal.</p>
+      </div>
+
+      <div class="timeline-wrapper" id="timeline-content-container">
+        <!-- Javascript fogja feltölteni a részletes időrenddel -->
+      </div>
+    </section>
+
+    <!-- 3. SZEKCIÓ: ÉLŐ HEGYI IDŐJÁRÁS & WEBKAMERÁK -->
+    <section id="weather-section" class="section">
+      <div class="section-header">
+        <h2>Élő Hegyi Időjárás &amp; Panoráma Webkamerák</h2>
+        <p>Valós idejű, magassági meteorológiai adatok a csúcsokról az Open-Meteo API-ból és 360°-os élő webkamerák a legfontosabb dolomiti helyszínekről.</p>
+      </div>
+
+      <!-- Időjárási státusz és zivatarfigyelmeztető sáv -->
+      <div class="weather-top-bar">
+        <div class="weather-alert-card">
+          <div class="weather-alert-icon">
+            <i class="fa-solid fa-cloud-bolt"></i>
+          </div>
+          <div class="weather-alert-content">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Alpesi Viharfigyelmeztető &bull; 13:00-ra fejezd be a gerinctúrát és a ferratát!</h4>
+            <p>A Dolomitokban nyáron a kora délutáni órákban hirtelen lecsapó hegyi viharok alakulhatnak ki. <strong>A hegymászók alapszabálya: délután 13:00-ra már érj le a kitett csúcsokról és a fém drótkötélről egy biztonságos menedékházba vagy a völgybe!</strong> Mindig kora reggel induljatok útnak!</p>
+          </div>
+        </div>
+
+        <div class="weather-controls">
+          <button class="btn-sm btn-weather-refresh" id="refresh-weather-btn">
+            <i class="fa-solid fa-arrows-rotate"></i> Időjárás Frissítése
+          </button>
+          <span class="weather-last-updated" id="weather-last-updated">
+            <i class="fa-regular fa-clock"></i> Lekérdezés folyamatban...
+          </span>
+        </div>
+      </div>
+
+      <!-- 4 Magashegyi Időjárás Kártya -->
+      <div class="weather-grid" id="weather-cards-container">
+        <!-- Javascript tölti be az élő Open-Meteo adatokat -->
+      </div>
+
+      <!-- Élő Webkamerák Hub -->
+      <div class="webcams-container-wrap" id="webcams-section-wrap">
+        <div class="subsection-header" style="margin-top:2.5rem;">
+          <div class="webcams-title-row">
+            <div>
+              <h3><i class="fa-solid fa-video" style="color:var(--accent-blue);"></i> 360°-os Élő Panoráma Webkamerák</h3>
+              <p>Valós idejű élő körpanorámák és webkamera képek a Dolomitok kulcscsúcsairól. Forgasd a kamerát 360°-ban közvetlenül az oldalon!</p>
+            </div>
+            <span class="webcam-main-live-tag"><span class="pulse-dot"></span> ÉLŐ STREAM KÖZVETÍTÉS</span>
+          </div>
+        </div>
+
+        <!-- Csúcsválasztó gombok / Quick tabs -->
+        <div class="webcam-tabs-bar" id="webcam-tabs-bar">
+          <!-- JS tölti be dinamikusan a csúcsok gombjait -->
+        </div>
+
+        <!-- Kiemelt Élő Stream Lejátszó -->
+        <div class="featured-webcam-player-card" id="featured-webcam-box">
+          <div class="featured-webcam-header">
+            <div class="featured-webcam-info">
+              <span class="featured-badge" id="featured-cam-badge">2 519 m • Seceda</span>
+              <h4 id="featured-cam-title">Seceda 2 500 m &amp; Odle gerinc</h4>
+              <p id="featured-cam-desc">Valós idejű, 360 fokban forgatható élő körpanoráma az ikonikus Seceda fűrészgerincre, a Fermeda sziklákra és a Val di Funes felé néző letörésekre.</p>
+            </div>
+            <div class="featured-webcam-actions">
+              <button type="button" class="btn-sm btn-webcam-refresh" id="featured-cam-refresh-btn" title="Kamera stream újratöltése">
+                <i class="fa-solid fa-rotate-right"></i> Frissítés
+              </button>
+              <a href="https://valgardena.panomax.com/seceda" target="_blank" rel="noopener noreferrer" class="btn-sm btn-webcam-external" id="featured-cam-external-link" title="Megnyitás közvetlen külön lapon">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Külső megnyitás
+              </a>
+            </div>
+          </div>
+
+          <div class="featured-iframe-wrapper" id="featured-iframe-wrap">
+            <iframe id="featured-webcam-iframe"
+                    src="https://valgardena.panomax.com/seceda"
+                    title="Élő Panoráma Webkamera"
+                    loading="lazy"
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+          </div>
+
+          <div class="featured-webcam-footer">
+            <div class="featured-tip">
+              <i class="fa-solid fa-circle-info" style="color:var(--accent-blue);"></i>
+              <span><strong>Interaktív vezérlés az élő ablakban:</strong> Egérrel vagy érintéssel 360 fokban forgatható a panoráma, nagyítható a tájkép, és a kamera alsó vezérlősávján visszanézheted az elmúlt órák felhőátvonulását.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Részletes Kártyák Fejléc -->
+        <div class="webcams-grid-subhead">
+          <h4><i class="fa-solid fa-mountain-sun" style="color:var(--accent-gold);"></i> Valamennyi csúcs élőkamera kártyája</h4>
+          <span style="font-size:0.85rem;color:var(--text-muted);">Kattints a „Fenti lejátszóba” gombra vagy nézd meg a helyi pillanatképeket!</span>
+        </div>
+
+        <div class="webcams-grid" id="webcams-cards-container">
+          <!-- Javascript rendereli a webkamera kártyákat -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SZEKCIÓ: HÜTTE KALAUZ & DÉL-TIROLI GASZTRO KISOKOS -->
+    <section id="huts-section" class="section">
+      <div class="section-header">
+        <h2>Hütte Kalauz &amp; Dél-Tiroli Gasztro Kisokos</h2>
+        <p>A túrák érintett magashegyi menedékházainak fontos tudnivalói (készpénz vs. kártya, ivóvíz, mosdó) és a kihagyhatatlan alpesi specialitások árakkal.</p>
+      </div>
+
+      <!-- Hütte szabályzat / Gyors áttekintő doboz -->
+      <div class="hut-rules-banner">
+        <div class="hut-rule-item">
+          <i class="fa-solid fa-money-bill-wave" style="color:#10b981;"></i>
+          <div>
+            <strong>KÉSZPÉNZ KÖTELEZŐ!</strong>
+            <span>A hegyi hütték többségében a térerő hiánya miatt nem működik a bankkártya olvasó. Mindig legyen nálatok készpénz (50-100 €)!</span>
+          </div>
+        </div>
+        <div class="hut-rule-item">
+          <i class="fa-solid fa-droplet-slash" style="color:#38bdf8;"></i>
+          <div>
+            <strong>Acqua non potabile</strong>
+            <span>A magashegyi mosdókban a víz esővíz / szűretlen forrásvíz, nem garantált ivóvíz. Mindig palackozott vizet vagy forralt teát kérjetek!</span>
+          </div>
+        </div>
+        <div class="hut-rule-item">
+          <i class="fa-solid fa-shoe-prints" style="color:#f59e0b;"></i>
+          <div>
+            <strong>Hütte Etikett</strong>
+            <span>A hálótermekbe és felső szintekre sáros bakancsban tilos belépni (papucs biztosított). A saját szemetet kötelező levinni a völgybe!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menedékház Kártyák (8 db) -->
+      <div class="subsection-header" style="margin-top:2.2rem;">
+        <h3><i class="fa-solid fa-house-chimney-window" style="color:var(--accent-blue);"></i> A Túrák Híres Menedékházai</h3>
+        <p>Kattints a részletekre: nyitvatartás, ivóvíz, térerő és helyi specialitások.</p>
+      </div>
+      <div class="huts-grid" id="huts-cards-container">
+        <!-- Javascript rendereli a menedékházakat -->
+      </div>
+
+      <!-- Gasztro kalauz & Kóstolólista -->
+      <div class="subsection-header" style="margin-top:3rem;">
+        <h3><i class="fa-solid fa-utensils" style="color:var(--accent-gold);"></i> Dél-Tiroli Gasztro Kisokos &amp; Átlagárak</h3>
+        <p>Mit rendelj a menedékházakban? A Dolomitok ikonikus ételei, desszertjei és hegyi italai árakkal és tippekkel.</p>
+      </div>
+      <div class="gastro-grid" id="gastro-cards-container">
+        <!-- Javascript rendereli a gasztro elemeket -->
+      </div>
+    </section>
+
+    <!-- 5. SZEKCIÓ: KÖLTSÉGVETÉS SZÁMOLÓ -->
+    <section id="budget-section" class="section">
+      <div class="section-header">
+        <h2>Költségvetés &amp; Pénzügyi Tervezés</h2>
+        <p>A PDF tervben szereplő becsült költségek (155 000 – 270 000 Ft/fő) interaktív kalkulátora, testreszabható paraméterekkel.</p>
+      </div>
+
+      <div class="budget-calculator-grid">
+        <!-- Vezérlő Panel -->
+        <div class="calc-panel">
+          <h3><i class="fa-solid fa-sliders" style="color:var(--accent-blue);"></i> Paraméterek Beállítása</h3>
+
+          <!-- Létszám csúszka -->
+          <div class="calc-control-group">
+            <div class="calc-label">
+              <span>Résztvevők száma:</span>
+              <span class="calc-value-badge" id="people-value">10 fő</span>
+            </div>
+            <input type="range" class="calc-slider" id="people-slider" min="2" max="15" value="10" step="1">
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem;">
+              <span>2 fő</span>
+              <span>10 fő (Eredeti terv)</span>
+              <span>15 fő</span>
+            </div>
+          </div>
+
+          <!-- Költségszint kiválasztása -->
+          <div class="calc-control-group">
+            <div class="calc-label">
+              <span>Költségvetési színvonal:</span>
+            </div>
+            <div class="calc-tier-selector">
+              <button class="tier-btn" data-tier="budget">
+                <i class="fa-solid fa-piggy-bank"></i><br>Takarékos
+              </button>
+              <button class="tier-btn active" data-tier="medium">
+                <i class="fa-solid fa-scale-balanced"></i><br>Tervezett Átlag
+              </button>
+              <button class="tier-btn" data-tier="premium">
+                <i class="fa-solid fa-gem"></i><br>Kényelmes
+              </button>
+            </div>
+          </div>
+
+          <!-- Pénznem választó & Élő Árfolyam -->
+          <div class="calc-control-group" style="margin-top: 1.5rem;">
+            <div class="calc-label">
+              <span>Megjelenített valuta:</span>
+            </div>
+            <div class="currency-toggle">
+              <button class="currency-btn active" data-currency="HUF">Magyar Forint (Ft)</button>
+              <button class="currency-btn" data-currency="EUR" id="eur-currency-btn">Euró (€ ~362 Ft/€)</button>
+            </div>
+
+            <!-- Élő EUR Árfolyam Kártya -->
+            <div class="live-rate-card" id="live-rate-card">
+              <div class="live-rate-header">
+                <div class="live-rate-badge-title">
+                  <span class="rate-status-dot live" id="rate-status-dot" title="Élő EKB bankközi árfolyam"></span>
+                  <span class="rate-provider-label" id="rate-provider-label">Napi EUR / HUF Árfolyam:</span>
+                </div>
+                <button type="button" class="rate-refresh-btn" id="refresh-rate-btn" title="Árfolyam frissítése" aria-label="Árfolyam frissítése">
+                  <i class="fa-solid fa-arrows-rotate" id="refresh-rate-icon"></i>
+                </button>
+              </div>
+              <div class="live-rate-body">
+                <div class="live-rate-price" id="live-rate-price">1 EUR = 362.4 Ft</div>
+                <div class="live-rate-meta" id="live-rate-meta">
+                  <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:0.75rem;"></i>
+                  <span id="live-rate-status-text">Hivatalos EKB bankközi referenciaárfolyam</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Összegző és Tétel Panel -->
+        <div class="calc-panel">
+          <h3><i class="fa-solid fa-receipt" style="color:var(--accent-blue);"></i> Költségnemek Bontása</h3>
+          
+          <ul class="budget-breakdown-list" id="budget-items-list">
+            <!-- Dinamikus tételek a Javascriptből -->
+          </ul>
+
+          <div class="budget-total-box">
+            <div style="font-size:0.85rem;text-transform:uppercase;color:var(--text-muted);font-weight:700;">
+              Becsült Összköltség
+            </div>
+            <div class="total-per-person" id="calc-total-per-person">
+              213 000 Ft / fő
+            </div>
+            <div class="total-team" id="calc-total-team">
+              Teljes csapat (10 fő): 2 130 000 Ft
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SZEKCIÓ: FELSZERELÉS CSEKKLISTA -->
+    <section id="checklist-section" class="section">
+      <div class="section-header">
+        <h2>Felszerelés &amp; Csomagolási Csekklista</h2>
+        <p>Interaktív ellenőrzőlista a mászóknak, a túrázóknak és az egész csapatnak. Pipáld be amit elpakoltál, a böngésződ megjegyzi!</p>
+      </div>
+
+      <div class="checklist-wrapper">
+        <!-- Haladási sáv -->
+        <div class="checklist-progress-card">
+          <div style="flex-shrink:0;">
+            <strong style="font-size:1.1rem;color:var(--text-primary);">Csomagolási Állapot:</strong>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-fill" id="checklist-progress-fill"></div>
+          </div>
+          <div style="flex-shrink:0;font-size:0.9rem;font-weight:700;color:var(--accent-blue);" id="checklist-progress-text">
+            0% Becsomagolva
+          </div>
+        </div>
+
+        <!-- 3 oszlopos csekklista kártyák -->
+        <div class="checklist-grid" id="checklist-container">
+          <!-- Javascript rendereli a 3 csoportot -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. SZEKCIÓ: GPX NYOMVONALAK KÖZPONT -->
+    <section id="gpx-section" class="section">
+      <div class="section-header">
+        <h2>Hivatalos GPX Nyomvonalak</h2>
+        <p>A túrák valós, geodéziai és OpenStreetMap GPS trackjei (.gpx). Töltsd le közvetlenül sportórára (Garmin, Suunto, Coros) vagy mobilappokba (Komoot, Mapy.cz, Strava, Outdooractive)!</p>
+      </div>
+
+      <div class="gpx-hub-grid" id="gpx-hub-container">
+        <!-- Javascript generálja a GPX kártyákat -->
+      </div>
+    </section>
+
+    <!-- 8. SZEKCIÓ: LOGISZTIKA & PARKOLÁS -->
+    <section id="logistics-section" class="section">
+      <div class="section-header">
+        <h2>Logisztika, Parkolási Kisokos &amp; Biztonság</h2>
+        <p>Alapvető tudnivalók az előzetes parkolófoglalásokról, a Tre Cime és Braies behajtási engedélyekről, azonnali Waze és Google Maps navigációs mélylinkekkel.</p>
+      </div>
+
+      <!-- Központi Parkolási Hub -->
+      <div class="parking-hub-wrap">
+        <div class="subsection-header">
+          <h3><i class="fa-solid fa-square-parking" style="color:var(--accent-blue);"></i> 1-Kattintásos Parkoló &amp; Útdíj Központ</h3>
+          <p>Közvetlen navigációs indítás mind a 8 rajtpont és hágó parkolójához. Ellenőrizd a díjakat és az érkezési időkorlátokat!</p>
+        </div>
+        <div class="parking-hub-grid" id="parking-hub-container">
+          <!-- Javascript rendereli a parkolókat -->
+        </div>
+      </div>
+
+      <div class="subsection-header" style="margin-top:2.8rem;">
+        <h3><i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i> Fontos Logisztikai &amp; Biztonsági Szabályok</h3>
+        <p>Hegyi biztonság, segélyhívási protokoll és felszerelési irányelvek.</p>
+      </div>
+      <div class="logistics-grid" id="logistics-container">
+        <!-- Javascript rendereli a logisztikai kártyákat -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RÉSZLETES ÚTIKALAUZ MODÁLIS ABLAK -->
+  <div class="modal-backdrop" id="tour-detail-modal">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Bezárás">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="modal-dynamic-content">
+        <!-- Dinamikus tartalom -->
+      </div>
+    </div>
+  </div>
+
+  <!-- LÁBLÉC -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p><strong>LordTúra 2026</strong> &bull; Hegyvidéki expedíciók, via ferraták és panorámatúrák</p>
+      <p style="font-size:0.8rem;color:var(--text-muted);">
+        Dolomitok csillagtúra &bull; Cortina d'Ampezzo bázis &bull; Tre Cime &bull; Sella &amp; egyéb hegyi kalandok
+      </p>
+    </div>
+  </footer>
+
+  <!-- MOBIL ALSÓ GYORSSÁV (BOTTOM NAV) -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Alsó gyorsnavigáció">
+    <button class="bottom-nav-item active" data-section="tours-section">
+      <i class="fa-solid fa-map-location-dot"></i>
+      <span>Térkép</span>
+    </button>
+    <button class="bottom-nav-item" data-section="timeline-section">
+      <i class="fa-solid fa-clock"></i>
+      <span>Időrend</span>
+    </button>
+    <button class="bottom-nav-item" onclick="scrollToCurrentElevation()">
+      <i class="fa-solid fa-chart-area"></i>
+      <span>Szintrajz</span>
+    </button>
+    <button class="bottom-nav-item" data-section="checklist-section">
+      <i class="fa-solid fa-list-check"></i>
+      <span>Csomag</span>
+    </button>
+    <button class="bottom-nav-item" id="bottom-menu-trigger">
+      <i class="fa-solid fa-bars"></i>
+      <span>Menü</span>
+    </button>
+  </nav>
+
+  <!-- LEBEGŐ GOMB: GYORS UGRÁS A TÉRKÉPHEZ / TETEJÉRE -->
+  <button class="floating-map-jump-btn" id="floating-map-jump-btn" onclick="scrollToMapOrTop()" title="Ugrás a térképhez" aria-label="Ugrás a térképhez">
+    <i class="fa-solid fa-map"></i>
+  </button>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Alkalmazás Adatok & Szkriptek -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1425,7 +1425,7 @@ window.downloadGPX = function(tourId) {
   // Fallback: dinamikus GPX XML generálás
   const coords = tourObj.routeCoordinates;
   let gpxXml = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="Dolomitok Expedicio - Antigravity" xmlns="http://www.topografix.com/GPX/1/1">
+<gpx version="1.1" creator="LordTúra - Antigravity" xmlns="http://www.topografix.com/GPX/1/1">
   <metadata>
     <name>${tourObj.name}</name>
     <desc>${tourObj.target}</desc>
@@ -1884,7 +1884,7 @@ let liveRateState = {
   fetchedOnce: false
 };
 
-const RATE_CACHE_KEY = 'dolomiti_eur_rate_v2';
+const RATE_CACHE_KEY = 'lordtura_eur_rate_v1';
 const RATE_CACHE_TTL = 30 * 60 * 1000; // 30 perc gyorsítótár érvényesség
 
 function initBudgetCalculator() {
@@ -2190,7 +2190,7 @@ function initChecklist() {
   const container = document.getElementById('checklist-container');
   if (!container) return;
 
-  const savedChecks = JSON.parse(localStorage.getItem('dolomiti_checklist') || '{}');
+  const savedChecks = JSON.parse(localStorage.getItem('lordtura_checklist') || localStorage.getItem('dolomiti_checklist') || '{}');
 
   const groups = [
     { key: 'climbers', title: 'Mászó Csapat Kötelező Felszerelés', class: 'climber', icon: 'fa-person-hiking', items: EXPEDITION_DATA.packingChecklist.climbers },
@@ -2219,9 +2219,9 @@ function initChecklist() {
 }
 
 window.toggleCheckItem = function(id, checkboxEl) {
-  const savedChecks = JSON.parse(localStorage.getItem('dolomiti_checklist') || '{}');
+  const savedChecks = JSON.parse(localStorage.getItem('lordtura_checklist') || localStorage.getItem('dolomiti_checklist') || '{}');
   savedChecks[id] = checkboxEl.checked;
-  localStorage.setItem('dolomiti_checklist', JSON.stringify(savedChecks));
+  localStorage.setItem('lordtura_checklist', JSON.stringify(savedChecks));
 
   const parentLabel = checkboxEl.closest('.check-item');
   if (parentLabel) {

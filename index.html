@@ -3,776 +3,1119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-  <title>Dolomitok Expedíció | 4 Napos Kalandterv (Mászók & Túrázók)</title>
-  <meta name="description" content="Dinamikus, interaktív túra- és expedíciós portál a 4 napos Dolomitok utazási tervhez. Via ferraták, panorámatúrák, élő térkép, költségvetés és logisztika 10 fős csapatnak.">
+  <title>LordTúra – Prémium Hegyi &amp; Alpesi Túratervező Portál</title>
+  <meta name="description" content="LordTúra: Prémium alpesi és hegyi expedíciós portál. Válaszd ki a túraterveket: interaktív térképek, valós szintrajzok, via ferraták, időjárás és logisztika.">
   <meta name="theme-color" content="#0b1120">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Content Security Policy (CSP): Engedélyezi a szükséges forrásokat és az unsafe-eval-t a térképhez, stream lejátszókhoz és dinamikus elemekhez -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' blob: data: https:; connect-src 'self' https:; frame-src 'self' https://*.panomax.com https://*.panocloud.webcam https://*.foto-webcam.eu https:; worker-src 'self' blob:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' blob: data: https:; connect-src 'self' https:; frame-src 'self' https:; worker-src 'self' blob:;">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome 6 Pro Icons (CDN) -->
+  <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- Leaflet Map CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
-  <!-- Egyedi Stíluslap -->
+  <!-- Közös Stíluslap -->
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* LordTúra Portál Kezdőlap Egyedi Stílusai */
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(11, 17, 32, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.9rem 1.5rem;
+    }
+
+    .portal-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .portal-brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+    }
+
+    .portal-brand-text h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .portal-brand-text span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .portal-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .portal-nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .portal-nav-link:hover {
+      color: var(--accent-blue);
+    }
+
+    .portal-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      color: #ffffff;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .portal-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.5);
+    }
+
+    /* Portál Hero */
+    .portal-hero {
+      position: relative;
+      padding: 5rem 1.5rem 4rem;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .portal-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .portal-hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.4) saturate(1.2);
+    }
+
+    .portal-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(11, 17, 32, 0.6) 0%, rgba(11, 17, 32, 0.95) 100%),
+                  linear-gradient(to bottom, transparent 60%, var(--bg-main) 100%);
+    }
+
+    .portal-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .portal-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1.1rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: var(--radius-full);
+      color: #38bdf8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .portal-title {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -1px;
+      color: #ffffff;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    }
+
+    .portal-title-gradient {
+      background: linear-gradient(135deg, #38bdf8, #60a5fa, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .portal-subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .portal-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .btn-portal-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.8rem;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(2, 132, 199, 0.45);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-portal-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(2, 132, 199, 0.65);
+      color: #ffffff;
+    }
+
+    .btn-portal-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.8rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+
+    .btn-portal-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Stat Bar */
+    .portal-stats-bar {
+      max-width: 1200px;
+      margin: -2rem auto 3.5rem;
+      position: relative;
+      z-index: 10;
+      padding: 0 1.5rem;
+    }
+
+    .portal-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      background: rgba(19, 29, 49, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(16px);
+    }
+
+    .portal-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .portal-stat-item:not(:last-child) {
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .portal-stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-blue);
+      flex-shrink: 0;
+    }
+
+    .portal-stat-info h3 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .portal-stat-info p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Expedíciók Választó Szekció */
+    .portal-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+
+    .portal-section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .portal-section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent-blue);
+      margin-bottom: 0.6rem;
+    }
+
+    .portal-section-title {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 0.8rem;
+    }
+
+    .portal-section-desc {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Kártya Rács */
+    .expeditions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .expedition-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .expedition-card.featured {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15);
+    }
+
+    .expedition-card.featured:hover {
+      transform: translateY(-6px);
+      border-color: rgba(56, 189, 248, 0.7);
+      box-shadow: 0 18px 45px rgba(56, 189, 248, 0.25);
+    }
+
+    .expedition-card:not(.featured):hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .expedition-card-media {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .expedition-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .expedition-card:hover .expedition-card-img {
+      transform: scale(1.06);
+    }
+
+    .expedition-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(24, 37, 63, 1) 0%, rgba(24, 37, 63, 0.4) 60%, transparent 100%);
+    }
+
+    .status-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(8px);
+    }
+
+    .status-badge.live {
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #34d399;
+    }
+
+    .status-badge.live .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulseLive 1.5s infinite;
+    }
+
+    @keyframes pulseLive {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+
+    .status-badge.upcoming {
+      background: rgba(245, 158, 11, 0.25);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      color: #fbbf24;
+    }
+
+    .status-badge.planning {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+    }
+
+    .expedition-card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .expedition-meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .expedition-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+      line-height: 1.25;
+    }
+
+    .expedition-desc {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .expedition-highlights-list {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .expedition-highlight-item {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .expedition-highlight-item i {
+      color: var(--accent-blue);
+      margin-top: 0.2rem;
+      font-size: 0.85rem;
+    }
+
+    .expedition-card-footer {
+      margin-top: auto;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn-open-tour {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.5rem;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-open-tour:hover {
+      background: linear-gradient(135deg, #0ea5e9, #1d4ed8);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(2, 132, 199, 0.55);
+      color: #ffffff;
+    }
+
+    .btn-open-disabled {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px dashed var(--border-subtle);
+      cursor: not-allowed;
+    }
+
+    /* Custom request card */
+    .expedition-card.custom-request {
+      background: rgba(19, 29, 49, 0.5);
+      border: 2px dashed rgba(56, 189, 248, 0.3);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .custom-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--accent-blue);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Platform Features Section */
+    .portal-features-section {
+      background: rgba(19, 29, 49, 0.5);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 5rem 1.5rem;
+    }
+
+    .portal-features-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .feature-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .portal-footer {
+      padding: 3.5rem 1.5rem 2.5rem;
+      text-align: center;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .portal-footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .portal-footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .portal-footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .portal-footer-links a:hover {
+      color: var(--accent-blue);
+    }
+
+    @media (max-width: 768px) {
+      .portal-stat-item:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        padding-bottom: 1rem;
+      }
+      .portal-hero {
+        padding: 4rem 1.2rem 3rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- TOP CROSS-TOUR NAVIGATION BAR -->
-  <div style="background: linear-gradient(90deg, #064e3b, #0f172a 50%, #064e3b); border-bottom: 1px solid rgba(16, 185, 129, 0.3); padding: 7px 16px; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; z-index: 10000; position: relative;">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Új Túra</span>
-      <span style="color: #cbd5e1;">Bécsi-Alpok &bull; 2026. szeptember 26.</span>
-    </div>
-    <a href="/durrewand/" style="color: #34d399; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='#a7f3d0'" onmouseout="this.style.color='#34d399'">
-      <span>🌲 Dürre Wand &amp; Plattenstein (1154 m) Túra</span>
-      <i class="fa-solid fa-arrow-right-long"></i>
-    </a>
-  </div>
-
-  <!-- HERO SZEKCIÓ -->
-  <!-- HERO SZEKCIÓ (DINAMIKUS DIAVETÍTÉSSEL & VIDEÓ HÁTTÉRREL) -->
-  <header class="hero" id="hero-header">
-    <!-- HÁTTÉR DIAVETÍTÉS & VIDEÓ RÉTEGEK -->
-    <div class="hero-media-wrapper" id="hero-media-wrapper" aria-hidden="true">
-      <div class="hero-slides-container" id="hero-slides-container">
-        <!-- Slide 1: Cadini di Misurina -->
-        <div class="hero-slide active" data-index="0" data-location="Cadini di Misurina" data-info="Sentiero Bonacossa kilátópont (2 336 m)" data-badge="2. Nap Túrázó" data-day="2" style="background-image: url('cadini_di_misurina.jpg');"></div>
-        <!-- Slide 2: Tre Cime di Lavaredo -->
-        <div class="hero-slide" data-index="1" data-location="Tre Cime di Lavaredo" data-info="Drei Zinnen &amp; Rifugio Locatelli (2 441 m)" data-badge="2. Nap Bónusz" data-day="2" style="background-image: url('hero_tre_cime.jpg');"></div>
-        <!-- Slide 3: Seceda & Odle gerinc -->
-        <div class="hero-slide" data-index="2" data-location="Seceda &amp; Odle fűrészgerinc" data-info="Val Gardena ikonikus gerince (2 519 m)" data-badge="4. Nap Közös" data-day="4" style="background-image: url('hero_seceda.jpg');"></div>
-        <!-- Slide 4: Lago di Braies -->
-        <div class="hero-slide" data-index="3" data-location="Lago di Braies" data-info="Pragser Wildsee smaragdzöld tengerszem (1 496 m)" data-badge="3. Nap Közös" data-day="3" style="background-image: url('hero_braies.jpg');"></div>
-        <!-- Slide 5: Passo Sella & Sassolungo -->
-        <div class="hero-slide" data-index="4" data-location="Passo Sella &amp; Sassolungo" data-info="Città dei Sassi &amp; Langkofel fal (2 240 m)" data-badge="3. Nap Túrázó" data-day="3" style="background-image: url('hero_passo_sella.jpg');"></div>
-        <!-- Slide 6: Val di Funes & Santa Maddalena -->
-        <div class="hero-slide" data-index="5" data-location="Val di Funes &amp; Ranui" data-info="Santa Maddalena &amp; Odle háttér (1 385 m)" data-badge="4. Nap Túrázó" data-day="4" style="background-image: url('hero_val_di_funes.jpg');"></div>
-        <!-- Slide 7: Lago di Misurina -->
-        <div class="hero-slide" data-index="6" data-location="Lago di Misurina" data-info="Part menti séta &amp; Sorapiss panoráma (1 756 m)" data-badge="1. Nap Közös" data-day="1" style="background-image: url('hero_misurina.jpg');"></div>
-        <!-- Slide 8: Tofana di Rozes & Cortina -->
-        <div class="hero-slide" data-index="7" data-location="Tofana di Rozes &amp; Cortina" data-info="Punta Fiames &amp; Cortina bázis (2 240 m)" data-badge="1. Nap Mászó" data-day="1" style="background-image: url('hero_tofana.jpg');"></div>
-      </div>
-
-      <!-- HÁTTÉR VIDEÓ RÉTEG -->
-      <div class="hero-video-container" id="hero-video-container">
-        <video id="hero-video-player" class="hero-bg-video" autoplay muted loop playsinline preload="auto">
-          <source src="hero_dolomites_loop.mp4" type="video/mp4">
-          <source src="hero_dolomites_loop.webm" type="video/webm">
-        </video>
-      </div>
-
-      <!-- SÖTÉTÍTŐ ÉS GRADIENS ÁTFEDÉSEK -->
-      <div class="hero-media-overlay"></div>
-    </div>
-
-    <div class="hero-content">
-      <div class="hero-badge-group">
-        <span class="badge badge-primary"><i class="fa-solid fa-mountain"></i> 4 Napos Expedíció</span>
-        <span class="badge badge-climber"><i class="fa-solid fa-person-hiking"></i> B, C / D Via Ferraták</span>
-        <span class="badge badge-hiker"><i class="fa-solid fa-shoe-prints"></i> Közepes Panorámatúrák</span>
-        <span class="badge badge-joint"><i class="fa-solid fa-campground"></i> Cortina Bázis</span>
-        <span class="badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;border:1px solid rgba(56,189,248,0.4);"><i class="fa-solid fa-chart-area"></i> 12 Valós Szintrajz</span>
-      </div>
-
-      <h1 class="hero-title">Dolomitok Expedíció: 4 Napos Terv</h1>
-      <p class="hero-subtitle">
-        Közös bázisú csillagtúra Cortina d'Ampezzóból egy 10 fős társaságnak (4 sziklamászó &amp; 6 panorámatúrázó/fotós) logisztikailag összehangolt napi programokkal és délutáni találkozókkal.
-      </p>
-
-      <!-- DIAVETÍTÉS & VIDEÓ VEZÉRLŐSÁV -->
-      <div class="hero-controls-wrapper">
-        <div class="hero-carousel-controls" aria-label="Háttér diavetítés vezérlők">
-          <!-- Előző gomb -->
-          <button type="button" class="hero-ctrl-btn" id="hero-prev-btn" title="Előző túrahelyszín (Balra nyíl)" aria-label="Előző kép">
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-
-          <!-- Aktuális helyszín információs sáv (Kattintásra odaugrik a túrához) -->
-          <div class="hero-photo-tag" id="hero-photo-tag" role="button" tabindex="0" title="Kattints a helyszín túrájának megtekintéséhez a térképen!">
-            <i class="fa-solid fa-camera" id="hero-photo-tag-icon"></i>
-            <span id="hero-photo-tag-text">Helyszín: <strong>Cadini di Misurina</strong> &bull; Sentiero Bonacossa kilátópont (2 336 m)</span>
-            <span class="hero-tag-badge" id="hero-tag-badge">2. Nap</span>
-          </div>
-
-          <!-- Következő gomb -->
-          <button type="button" class="hero-ctrl-btn" id="hero-next-btn" title="Következő túrahelyszín (Jobbra nyíl)" aria-label="Következő kép">
-            <i class="fa-solid fa-chevron-right"></i>
-          </button>
-
-          <!-- Szünet / Lejátszás -->
-          <button type="button" class="hero-ctrl-btn hero-pause-btn" id="hero-play-pause-btn" title="Diavetítés megállítása / indítása" aria-label="Szünet / Indítás">
-            <i class="fa-solid fa-pause"></i>
-          </button>
-
-          <!-- Drónvideó Mód Váltó -->
-          <button type="button" class="hero-ctrl-btn hero-video-toggle-btn" id="hero-video-toggle-btn" title="Alpesi drónvideó háttér be-/kikapcsolása">
-            <i class="fa-solid fa-film"></i>
-            <span class="video-btn-label">Drónvideó</span>
-          </button>
+  <!-- PORTÁL FEJLÉC NAVIGÁCIÓ -->
+  <header class="portal-nav">
+    <div class="portal-nav-container">
+      <a href="index.html" class="portal-brand">
+        <div class="portal-brand-icon">
+          <i class="fa-solid fa-mountain-sun"></i>
         </div>
-
-        <!-- Helyszín Pagináció Pontok -->
-        <div class="hero-indicators" id="hero-indicators" role="tablist" aria-label="Túrahelyszínek váltása"></div>
-      </div>
-
-      <!-- Statisztikai kártyák -->
-      <div class="hero-stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon climber">
-            <i class="fa-solid fa-person-hiking"></i>
-          </div>
-          <div class="stat-info">
-            <h4>Mászó Csapat (4 fő)</h4>
-            <p>Punta Fiames, Monte Paterno, Pisciadù, Piccolo Cir</p>
-          </div>
+        <div class="portal-brand-text">
+          <h1>LordTúra</h1>
+          <span>Alpesi Expedíciós Portál</span>
         </div>
+      </a>
 
-        <div class="stat-card">
-          <div class="stat-icon hiker">
-            <i class="fa-solid fa-shoe-prints"></i>
-          </div>
-          <div class="stat-info">
-            <h4>Túrázó Csapat (6 fő)</h4>
-            <p>Tofana, Cadini kilátó, Sella &amp; Braies, Seceda</p>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon base">
-            <i class="fa-solid fa-hotel"></i>
-          </div>
-          <div class="stat-info">
-            <h4>Cortina d'Ampezzo</h4>
-            <p>Közös bázis apartman 4 éjszakára</p>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon joint">
-            <i class="fa-solid fa-camera-retro"></i>
-          </div>
-          <div class="stat-info">
-            <h4>Ikonikus Látvány</h4>
-            <p>Tre Cime, Braies-tó, Seceda fűrészgerinc</p>
-          </div>
-        </div>
+      <div class="portal-nav-links">
+        <a href="#expeditions" class="portal-nav-link">
+          <i class="fa-solid fa-route"></i> Túrák
+        </a>
+        <a href="durrewand/index.html" class="portal-nav-link" style="color:#34d399;font-weight:600;">
+          <i class="fa-solid fa-tree"></i> Plattenstein
+        </a>
+        <a href="dolomitok.html" class="portal-cta-btn">
+          <i class="fa-solid fa-mountain"></i> Dolomitok 4D <i class="fa-solid fa-arrow-right"></i>
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- FŐ NAVIGÁCIÓ -->
-  <nav class="main-nav">
-    <div class="nav-container">
-      <div class="nav-brand-group">
-        <a href="#" class="nav-brand" id="nav-brand-logo" title="Vissza a lap tetejére">
+  <!-- HERO SZEKCIÓ -->
+  <section class="portal-hero">
+    <div class="portal-hero-bg">
+      <video class="portal-hero-video" autoplay muted loop playsinline poster="hero_tre_cime.jpg">
+        <source src="hero_dolomites_loop.mp4" type="video/mp4">
+        <source src="hero_dolomites_loop.webm" type="video/webm">
+      </video>
+      <div class="portal-hero-overlay"></div>
+    </div>
+
+    <div class="portal-hero-content">
+      <div class="portal-badge-pill">
+        <i class="fa-solid fa-compass"></i>
+        <span>LordTúra Kalandtervező Központ</span>
+      </div>
+
+      <h2 class="portal-title">
+        Válaszd ki a következő <br>
+        <span class="portal-title-gradient">Hegyi Expedíciódat!</span>
+      </h2>
+
+      <p class="portal-subtitle">
+        Interaktív, geodéziai pontosságú túratervezés sziklamászóknak és panorámatúrázóknak. Valós GPX nyomvonalak, szintrajzok, hágók, menedékházak és élő hegyi időjárás egy helyen.
+      </p>
+
+      <div class="portal-hero-actions">
+        <a href="dolomitok.html" class="btn-portal-primary">
+          <i class="fa-solid fa-mountain"></i>
+          <span>Dolomitok 4D</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="durrewand/index.html" class="btn-portal-primary" style="background:linear-gradient(135deg, #059669, #10b981);box-shadow:0 6px 24px rgba(16,185,129,0.45);">
+          <i class="fa-solid fa-tree"></i>
+          <span>Plattenstein (1154 m)</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#expeditions" class="btn-portal-secondary">
           <i class="fa-solid fa-compass"></i>
-          <span>Dolomiti 4D</span>
+          <span>Összes Túraterv</span>
         </a>
-      </div>
-
-      <div class="nav-actions-mobile">
-        <a href="tel:118" class="mobile-sos-chip" title="Olasz Hegyi Mentők: 118">
-          <i class="fa-solid fa-truck-medical"></i> SOS 118
-        </a>
-        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menü megnyitása">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
-
-      <div class="nav-tabs">
-        <button class="nav-tab active" data-section="tours-section">
-          <i class="fa-solid fa-map-location-dot"></i> Túrák &amp; Térkép
-        </button>
-        <button class="nav-tab" data-section="timeline-section">
-          <i class="fa-solid fa-timeline"></i> Napi Időrend
-        </button>
-        <button class="nav-tab" data-section="weather-section">
-          <i class="fa-solid fa-cloud-sun-rain"></i> Időjárás &amp; Webkam
-        </button>
-        <button class="nav-tab" data-section="huts-section">
-          <i class="fa-solid fa-house-chimney-window"></i> Hütték &amp; Gasztro
-        </button>
-        <button class="nav-tab" data-section="budget-section">
-          <i class="fa-solid fa-calculator"></i> Költségvetés
-        </button>
-        <button class="nav-tab" data-section="checklist-section">
-          <i class="fa-solid fa-list-check"></i> Felszerelés
-        </button>
-        <button class="nav-tab" data-section="gpx-section">
-          <i class="fa-solid fa-file-arrow-down"></i> GPX Letöltések
-        </button>
-        <button class="nav-tab" data-section="logistics-section">
-          <i class="fa-solid fa-square-parking"></i> Logisztika &amp; Parkolás
-        </button>
       </div>
     </div>
-  </nav>
+  </section>
 
-  <!-- MOBIL OLDALSÓ MENÜ (DRAWER) & HÁTTÉR MASZK -->
-  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
-  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobil oldalsó navigáció">
-    <div class="drawer-header">
-      <div class="drawer-brand">
-        <i class="fa-solid fa-mountain-sun" style="color:var(--accent-blue);"></i>
-        <div>
-          <h4>Dolomitok 4D</h4>
-          <span>Expedíciós Portál &bull; 10 Fő</span>
+  <!-- STATISZTIKA SÁV -->
+  <div class="portal-stats-bar">
+    <div class="portal-stats-grid">
+      <div class="portal-stat-item">
+        <div class="portal-stat-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+        <div class="portal-stat-info">
+          <h3>13+ Túra</h3>
+          <p>Dolomitok &bull; Dürre Wand</p>
         </div>
       </div>
-      <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Menü bezárása">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <div class="drawer-body">
-      <div class="drawer-section-title">Navigáció</div>
-      <nav class="drawer-nav">
-        <button class="drawer-nav-item active" data-section="tours-section">
-          <i class="fa-solid fa-map-marked-alt"></i>
-          <span>Napi Túrák &amp; Térkép</span>
-        </button>
-        <button class="drawer-nav-item" data-section="timeline-section">
-          <i class="fa-solid fa-timeline"></i>
-          <span>Napi Időrend &amp; Találkozók</span>
-        </button>
-        <button class="drawer-nav-item" data-section="weather-section">
-          <i class="fa-solid fa-cloud-sun-rain"></i>
-          <span>Élő Időjárás &amp; Webkamerák</span>
-        </button>
-        <button class="drawer-nav-item" data-section="huts-section">
-          <i class="fa-solid fa-house-chimney-window"></i>
-          <span>Hütték &amp; Gasztro Kalauz</span>
-        </button>
-        <button class="drawer-nav-item" data-section="budget-section">
-          <i class="fa-solid fa-calculator"></i>
-          <span>Költségvetés Számoló</span>
-        </button>
-        <button class="drawer-nav-item" data-section="checklist-section">
-          <i class="fa-solid fa-list-check"></i>
-          <span>Felszerelés Csekklista</span>
-        </button>
-        <button class="drawer-nav-item" data-section="gpx-section">
-          <i class="fa-solid fa-file-arrow-down"></i>
-          <span>GPX Nyomvonalak (12 db)</span>
-        </button>
-        <button class="drawer-nav-item" data-section="logistics-section">
-          <i class="fa-solid fa-square-parking"></i>
-          <span>Logisztika &amp; Parkolási Kisokos</span>
-        </button>
-      </nav>
-
-      <div class="drawer-section-title">Gyors Ugrás a Napokra</div>
-      <div class="drawer-quick-days">
-        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(1)">
-          <span class="day-num">1</span>
-          <span>Cortina</span>
-        </button>
-        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(2)">
-          <span class="day-num">2</span>
-          <span>Tre Cime</span>
-        </button>
-        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(3)">
-          <span class="day-num">3</span>
-          <span>Pisciadù / Braies</span>
-        </button>
-        <button class="quick-day-btn" onclick="jumpToDayFromDrawer(4)">
-          <span class="day-num">4</span>
-          <span>Seceda / Funes</span>
-        </button>
-      </div>
-
-      <div class="drawer-section-title">Alpesi Segélyhívás (SOS)</div>
-      <div class="drawer-sos-box">
-        <a href="tel:118" class="sos-btn emergency">
-          <i class="fa-solid fa-truck-medical"></i>
-          <div>
-            <strong>118 – Olasz Hegyi Mentők</strong>
-            <span>Soccorso Alpino (Dolomiti)</span>
-          </div>
-        </a>
-        <a href="tel:112" class="sos-btn general">
-          <i class="fa-solid fa-phone-volume"></i>
-          <div>
-            <strong>112 – Európai Segélyhívó</strong>
-            <span>Általános vészhelyzeti szám</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="drawer-info-box">
-        <div><i class="fa-solid fa-hotel" style="color:var(--accent-gold);"></i> <strong>Bázis:</strong> Cortina d'Ampezzo környéke</div>
-        <div><i class="fa-solid fa-users" style="color:var(--hiker-color);"></i> <strong>Csapat:</strong> 4 mászó &bull; 6 túrázó</div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- FŐ TARTALOM KONTÉNER -->
-  <main class="main-container">
-
-    <!-- 1. SZEKCIÓ: NAPI TÚRÁK & INTERAKTÍV TÉRKÉP -->
-    <section id="tours-section" class="section active">
-      
-      <!-- INTERAKTÍV TÉRKÉP WIDGET -->
-      <div class="map-section-wrapper">
-        <div class="map-control-bar">
-          <!-- Nap szerinti szűrők -->
-          <div class="filter-group">
-            <span class="filter-label">Napok:</span>
-            <button class="filter-btn day-filter-btn active" data-day="all">Összes</button>
-            <button class="filter-btn day-filter-btn" data-day="1">1. Nap (Cortina)</button>
-            <button class="filter-btn day-filter-btn" data-day="2">2. Nap (Tre Cime)</button>
-            <button class="filter-btn day-filter-btn" data-day="3">3. Nap (Sella/Braies)</button>
-            <button class="filter-btn day-filter-btn" data-day="4">4. Nap (Seceda)</button>
-          </div>
-
-          <!-- Csapat szerinti szűrők -->
-          <div class="filter-group">
-            <span class="filter-label">Csapat:</span>
-            <button class="filter-btn team-filter-btn active" data-team="all">Mindkettő</button>
-            <button class="filter-btn team-filter-btn climber" data-team="climber">
-              <i class="fa-solid fa-person-hiking"></i> Mászók
-            </button>
-            <button class="filter-btn team-filter-btn hiker" data-team="hiker">
-              <i class="fa-solid fa-shoe-prints"></i> Túrázók
-            </button>
-            <button class="filter-btn team-filter-btn joint" data-team="joint">
-              <i class="fa-solid fa-users"></i> Közös
-            </button>
-          </div>
-        </div>
-
-        <!-- Térkép Vászon -->
-        <div class="map-canvas-container">
-          <div id="leaflet-map"></div>
-
-          <!-- Lebegő Jelmagyarázat -->
-          <div class="map-legend">
-            <h5>Jelmagyarázat</h5>
-            <div class="legend-item">
-              <div class="legend-line climber"></div>
-              <span>Mászó útvonalak (Ferraták)</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-line hiker"></div>
-              <span>Túrázó panorámautak</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-line joint"></div>
-              <span>Közös délutáni programok</span>
-            </div>
-          </div>
+      <div class="portal-stat-item">
+        <div class="portal-stat-icon" style="color:#ef4444;background:rgba(239,68,68,0.12);"><i class="fa-solid fa-flag"></i></div>
+        <div class="portal-stat-info">
+          <h3>2 Ország</h3>
+          <p>Olaszország &bull; Ausztria</p>
         </div>
       </div>
-
-      <!-- Szekció bevezető -->
-      <div class="section-header">
-        <h2>Részletes Napi Programok &amp; Szintrajzok</h2>
-        <p>A két csapat párhuzamos útvonalai, valós geodéziai szintrajzai (interaktív magasságprofilok térkép-szinkronnal), technikai adatai és délutáni találkozási pontjai.</p>
-      </div>
-
-      <!-- Dinamikus Napi Kártyák Konténer -->
-      <div id="days-cards-container">
-        <!-- Javascript fogja legenerálni a 4 napot -->
-      </div>
-    </section>
-
-    <!-- 2. SZEKCIÓ: NAPI IDŐREND & TALÁLKOZÓK -->
-    <section id="timeline-section" class="section">
-      <div class="section-header">
-        <h2>Napi Időrend &amp; Logisztikai Találkozók</h2>
-        <p>Hogyan koordinál a 4 mászó és a 6 kiránduló reggeltől estig? Párhuzamos idővonal a találkozási pontokkal.</p>
-      </div>
-
-      <div class="timeline-wrapper" id="timeline-content-container">
-        <!-- Javascript fogja feltölteni a részletes időrenddel -->
-      </div>
-    </section>
-
-    <!-- 3. SZEKCIÓ: ÉLŐ HEGYI IDŐJÁRÁS & WEBKAMERÁK -->
-    <section id="weather-section" class="section">
-      <div class="section-header">
-        <h2>Élő Hegyi Időjárás &amp; Panoráma Webkamerák</h2>
-        <p>Valós idejű, magassági meteorológiai adatok a csúcsokról az Open-Meteo API-ból és 360°-os élő webkamerák a legfontosabb dolomiti helyszínekről.</p>
-      </div>
-
-      <!-- Időjárási státusz és zivatarfigyelmeztető sáv -->
-      <div class="weather-top-bar">
-        <div class="weather-alert-card">
-          <div class="weather-alert-icon">
-            <i class="fa-solid fa-cloud-bolt"></i>
-          </div>
-          <div class="weather-alert-content">
-            <h4><i class="fa-solid fa-triangle-exclamation"></i> Alpesi Viharfigyelmeztető &bull; 13:00-ra fejezd be a gerinctúrát és a ferratát!</h4>
-            <p>A Dolomitokban nyáron a kora délutáni órákban hirtelen lecsapó hegyi viharok alakulhatnak ki. <strong>A hegymászók alapszabálya: délután 13:00-ra már érj le a kitett csúcsokról és a fém drótkötélről egy biztonságos menedékházba vagy a völgybe!</strong> Mindig kora reggel induljatok útnak!</p>
-          </div>
-        </div>
-
-        <div class="weather-controls">
-          <button class="btn-sm btn-weather-refresh" id="refresh-weather-btn">
-            <i class="fa-solid fa-arrows-rotate"></i> Időjárás Frissítése
-          </button>
-          <span class="weather-last-updated" id="weather-last-updated">
-            <i class="fa-regular fa-clock"></i> Lekérdezés folyamatban...
-          </span>
+      <div class="portal-stat-item">
+        <div class="portal-stat-icon" style="color:#10b981;background:rgba(16,185,129,0.12);"><i class="fa-solid fa-chart-area"></i></div>
+        <div class="portal-stat-info">
+          <h3>100% Valós</h3>
+          <p>SVG Magasságprofil</p>
         </div>
       </div>
-
-      <!-- 4 Magashegyi Időjárás Kártya -->
-      <div class="weather-grid" id="weather-cards-container">
-        <!-- Javascript tölti be az élő Open-Meteo adatokat -->
-      </div>
-
-      <!-- Élő Webkamerák Hub -->
-      <div class="webcams-container-wrap" id="webcams-section-wrap">
-        <div class="subsection-header" style="margin-top:2.5rem;">
-          <div class="webcams-title-row">
-            <div>
-              <h3><i class="fa-solid fa-video" style="color:var(--accent-blue);"></i> 360°-os Élő Panoráma Webkamerák</h3>
-              <p>Valós idejű élő körpanorámák és webkamera képek a Dolomitok kulcscsúcsairól. Forgasd a kamerát 360°-ban közvetlenül az oldalon!</p>
-            </div>
-            <span class="webcam-main-live-tag"><span class="pulse-dot"></span> ÉLŐ STREAM KÖZVETÍTÉS</span>
-          </div>
+      <div class="portal-stat-item">
+        <div class="portal-stat-icon" style="color:#f59e0b;background:rgba(245,158,11,0.12);"><i class="fa-solid fa-cloud-sun"></i></div>
+        <div class="portal-stat-info">
+          <h3>Élő Időjárás</h3>
+          <p>&amp; 360° Webkamerák</p>
         </div>
-
-        <!-- Csúcsválasztó gombok / Quick tabs -->
-        <div class="webcam-tabs-bar" id="webcam-tabs-bar">
-          <!-- JS tölti be dinamikusan a csúcsok gombjait -->
-        </div>
-
-        <!-- Kiemelt Élő Stream Lejátszó -->
-        <div class="featured-webcam-player-card" id="featured-webcam-box">
-          <div class="featured-webcam-header">
-            <div class="featured-webcam-info">
-              <span class="featured-badge" id="featured-cam-badge">2 519 m • Seceda</span>
-              <h4 id="featured-cam-title">Seceda 2 500 m &amp; Odle gerinc</h4>
-              <p id="featured-cam-desc">Valós idejű, 360 fokban forgatható élő körpanoráma az ikonikus Seceda fűrészgerincre, a Fermeda sziklákra és a Val di Funes felé néző letörésekre.</p>
-            </div>
-            <div class="featured-webcam-actions">
-              <button type="button" class="btn-sm btn-webcam-refresh" id="featured-cam-refresh-btn" title="Kamera stream újratöltése">
-                <i class="fa-solid fa-rotate-right"></i> Frissítés
-              </button>
-              <a href="https://valgardena.panomax.com/seceda" target="_blank" rel="noopener noreferrer" class="btn-sm btn-webcam-external" id="featured-cam-external-link" title="Megnyitás közvetlen külön lapon">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Külső megnyitás
-              </a>
-            </div>
-          </div>
-
-          <div class="featured-iframe-wrapper" id="featured-iframe-wrap">
-            <iframe id="featured-webcam-iframe"
-                    src="https://valgardena.panomax.com/seceda"
-                    title="Élő Panoráma Webkamera"
-                    loading="lazy"
-                    allowfullscreen
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-            </iframe>
-          </div>
-
-          <div class="featured-webcam-footer">
-            <div class="featured-tip">
-              <i class="fa-solid fa-circle-info" style="color:var(--accent-blue);"></i>
-              <span><strong>Interaktív vezérlés az élő ablakban:</strong> Egérrel vagy érintéssel 360 fokban forgatható a panoráma, nagyítható a tájkép, és a kamera alsó vezérlősávján visszanézheted az elmúlt órák felhőátvonulását.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Részletes Kártyák Fejléc -->
-        <div class="webcams-grid-subhead">
-          <h4><i class="fa-solid fa-mountain-sun" style="color:var(--accent-gold);"></i> Valamennyi csúcs élőkamera kártyája</h4>
-          <span style="font-size:0.85rem;color:var(--text-muted);">Kattints a „Fenti lejátszóba” gombra vagy nézd meg a helyi pillanatképeket!</span>
-        </div>
-
-        <div class="webcams-grid" id="webcams-cards-container">
-          <!-- Javascript rendereli a webkamera kártyákat -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. SZEKCIÓ: HÜTTE KALAUZ & DÉL-TIROLI GASZTRO KISOKOS -->
-    <section id="huts-section" class="section">
-      <div class="section-header">
-        <h2>Hütte Kalauz &amp; Dél-Tiroli Gasztro Kisokos</h2>
-        <p>A túrák érintett magashegyi menedékházainak fontos tudnivalói (készpénz vs. kártya, ivóvíz, mosdó) és a kihagyhatatlan alpesi specialitások árakkal.</p>
-      </div>
-
-      <!-- Hütte szabályzat / Gyors áttekintő doboz -->
-      <div class="hut-rules-banner">
-        <div class="hut-rule-item">
-          <i class="fa-solid fa-money-bill-wave" style="color:#10b981;"></i>
-          <div>
-            <strong>KÉSZPÉNZ KÖTELEZŐ!</strong>
-            <span>A hegyi hütték többségében a térerő hiánya miatt nem működik a bankkártya olvasó. Mindig legyen nálatok készpénz (50-100 €)!</span>
-          </div>
-        </div>
-        <div class="hut-rule-item">
-          <i class="fa-solid fa-droplet-slash" style="color:#38bdf8;"></i>
-          <div>
-            <strong>Acqua non potabile</strong>
-            <span>A magashegyi mosdókban a víz esővíz / szűretlen forrásvíz, nem garantált ivóvíz. Mindig palackozott vizet vagy forralt teát kérjetek!</span>
-          </div>
-        </div>
-        <div class="hut-rule-item">
-          <i class="fa-solid fa-shoe-prints" style="color:#f59e0b;"></i>
-          <div>
-            <strong>Hütte Etikett</strong>
-            <span>A hálótermekbe és felső szintekre sáros bakancsban tilos belépni (papucs biztosított). A saját szemetet kötelező levinni a völgybe!</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Menedékház Kártyák (8 db) -->
-      <div class="subsection-header" style="margin-top:2.2rem;">
-        <h3><i class="fa-solid fa-house-chimney-window" style="color:var(--accent-blue);"></i> A Túrák Híres Menedékházai</h3>
-        <p>Kattints a részletekre: nyitvatartás, ivóvíz, térerő és helyi specialitások.</p>
-      </div>
-      <div class="huts-grid" id="huts-cards-container">
-        <!-- Javascript rendereli a menedékházakat -->
-      </div>
-
-      <!-- Gasztro kalauz & Kóstolólista -->
-      <div class="subsection-header" style="margin-top:3rem;">
-        <h3><i class="fa-solid fa-utensils" style="color:var(--accent-gold);"></i> Dél-Tiroli Gasztro Kisokos &amp; Átlagárak</h3>
-        <p>Mit rendelj a menedékházakban? A Dolomitok ikonikus ételei, desszertjei és hegyi italai árakkal és tippekkel.</p>
-      </div>
-      <div class="gastro-grid" id="gastro-cards-container">
-        <!-- Javascript rendereli a gasztro elemeket -->
-      </div>
-    </section>
-
-    <!-- 5. SZEKCIÓ: KÖLTSÉGVETÉS SZÁMOLÓ -->
-    <section id="budget-section" class="section">
-      <div class="section-header">
-        <h2>Költségvetés &amp; Pénzügyi Tervezés</h2>
-        <p>A PDF tervben szereplő becsült költségek (155 000 – 270 000 Ft/fő) interaktív kalkulátora, testreszabható paraméterekkel.</p>
-      </div>
-
-      <div class="budget-calculator-grid">
-        <!-- Vezérlő Panel -->
-        <div class="calc-panel">
-          <h3><i class="fa-solid fa-sliders" style="color:var(--accent-blue);"></i> Paraméterek Beállítása</h3>
-
-          <!-- Létszám csúszka -->
-          <div class="calc-control-group">
-            <div class="calc-label">
-              <span>Résztvevők száma:</span>
-              <span class="calc-value-badge" id="people-value">10 fő</span>
-            </div>
-            <input type="range" class="calc-slider" id="people-slider" min="2" max="15" value="10" step="1">
-            <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem;">
-              <span>2 fő</span>
-              <span>10 fő (Eredeti terv)</span>
-              <span>15 fő</span>
-            </div>
-          </div>
-
-          <!-- Költségszint kiválasztása -->
-          <div class="calc-control-group">
-            <div class="calc-label">
-              <span>Költségvetési színvonal:</span>
-            </div>
-            <div class="calc-tier-selector">
-              <button class="tier-btn" data-tier="budget">
-                <i class="fa-solid fa-piggy-bank"></i><br>Takarékos
-              </button>
-              <button class="tier-btn active" data-tier="medium">
-                <i class="fa-solid fa-scale-balanced"></i><br>Tervezett Átlag
-              </button>
-              <button class="tier-btn" data-tier="premium">
-                <i class="fa-solid fa-gem"></i><br>Kényelmes
-              </button>
-            </div>
-          </div>
-
-          <!-- Pénznem választó & Élő Árfolyam -->
-          <div class="calc-control-group" style="margin-top: 1.5rem;">
-            <div class="calc-label">
-              <span>Megjelenített valuta:</span>
-            </div>
-            <div class="currency-toggle">
-              <button class="currency-btn active" data-currency="HUF">Magyar Forint (Ft)</button>
-              <button class="currency-btn" data-currency="EUR" id="eur-currency-btn">Euró (€ ~362 Ft/€)</button>
-            </div>
-
-            <!-- Élő EUR Árfolyam Kártya -->
-            <div class="live-rate-card" id="live-rate-card">
-              <div class="live-rate-header">
-                <div class="live-rate-badge-title">
-                  <span class="rate-status-dot live" id="rate-status-dot" title="Élő EKB bankközi árfolyam"></span>
-                  <span class="rate-provider-label" id="rate-provider-label">Napi EUR / HUF Árfolyam:</span>
-                </div>
-                <button type="button" class="rate-refresh-btn" id="refresh-rate-btn" title="Árfolyam frissítése" aria-label="Árfolyam frissítése">
-                  <i class="fa-solid fa-arrows-rotate" id="refresh-rate-icon"></i>
-                </button>
-              </div>
-              <div class="live-rate-body">
-                <div class="live-rate-price" id="live-rate-price">1 EUR = 362.4 Ft</div>
-                <div class="live-rate-meta" id="live-rate-meta">
-                  <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:0.75rem;"></i>
-                  <span id="live-rate-status-text">Hivatalos EKB bankközi referenciaárfolyam</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Összegző és Tétel Panel -->
-        <div class="calc-panel">
-          <h3><i class="fa-solid fa-receipt" style="color:var(--accent-blue);"></i> Költségnemek Bontása</h3>
-          
-          <ul class="budget-breakdown-list" id="budget-items-list">
-            <!-- Dinamikus tételek a Javascriptből -->
-          </ul>
-
-          <div class="budget-total-box">
-            <div style="font-size:0.85rem;text-transform:uppercase;color:var(--text-muted);font-weight:700;">
-              Becsült Összköltség
-            </div>
-            <div class="total-per-person" id="calc-total-per-person">
-              213 000 Ft / fő
-            </div>
-            <div class="total-team" id="calc-total-team">
-              Teljes csapat (10 fő): 2 130 000 Ft
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. SZEKCIÓ: FELSZERELÉS CSEKKLISTA -->
-    <section id="checklist-section" class="section">
-      <div class="section-header">
-        <h2>Felszerelés &amp; Csomagolási Csekklista</h2>
-        <p>Interaktív ellenőrzőlista a mászóknak, a túrázóknak és az egész csapatnak. Pipáld be amit elpakoltál, a böngésződ megjegyzi!</p>
-      </div>
-
-      <div class="checklist-wrapper">
-        <!-- Haladási sáv -->
-        <div class="checklist-progress-card">
-          <div style="flex-shrink:0;">
-            <strong style="font-size:1.1rem;color:var(--text-primary);">Csomagolási Állapot:</strong>
-          </div>
-          <div class="progress-bar-container">
-            <div class="progress-fill" id="checklist-progress-fill"></div>
-          </div>
-          <div style="flex-shrink:0;font-size:0.9rem;font-weight:700;color:var(--accent-blue);" id="checklist-progress-text">
-            0% Becsomagolva
-          </div>
-        </div>
-
-        <!-- 3 oszlopos csekklista kártyák -->
-        <div class="checklist-grid" id="checklist-container">
-          <!-- Javascript rendereli a 3 csoportot -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. SZEKCIÓ: GPX NYOMVONALAK KÖZPONT -->
-    <section id="gpx-section" class="section">
-      <div class="section-header">
-        <h2>Hivatalos GPX Nyomvonalak</h2>
-        <p>A túrák valós, geodéziai és OpenStreetMap GPS trackjei (.gpx). Töltsd le közvetlenül sportórára (Garmin, Suunto, Coros) vagy mobilappokba (Komoot, Mapy.cz, Strava, Outdooractive)!</p>
-      </div>
-
-      <div class="gpx-hub-grid" id="gpx-hub-container">
-        <!-- Javascript generálja a GPX kártyákat -->
-      </div>
-    </section>
-
-    <!-- 8. SZEKCIÓ: LOGISZTIKA & PARKOLÁS -->
-    <section id="logistics-section" class="section">
-      <div class="section-header">
-        <h2>Logisztika, Parkolási Kisokos &amp; Biztonság</h2>
-        <p>Alapvető tudnivalók az előzetes parkolófoglalásokról, a Tre Cime és Braies behajtási engedélyekről, azonnali Waze és Google Maps navigációs mélylinkekkel.</p>
-      </div>
-
-      <!-- Központi Parkolási Hub -->
-      <div class="parking-hub-wrap">
-        <div class="subsection-header">
-          <h3><i class="fa-solid fa-square-parking" style="color:var(--accent-blue);"></i> 1-Kattintásos Parkoló &amp; Útdíj Központ</h3>
-          <p>Közvetlen navigációs indítás mind a 8 rajtpont és hágó parkolójához. Ellenőrizd a díjakat és az érkezési időkorlátokat!</p>
-        </div>
-        <div class="parking-hub-grid" id="parking-hub-container">
-          <!-- Javascript rendereli a parkolókat -->
-        </div>
-      </div>
-
-      <div class="subsection-header" style="margin-top:2.8rem;">
-        <h3><i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i> Fontos Logisztikai &amp; Biztonsági Szabályok</h3>
-        <p>Hegyi biztonság, segélyhívási protokoll és felszerelési irányelvek.</p>
-      </div>
-      <div class="logistics-grid" id="logistics-container">
-        <!-- Javascript rendereli a logisztikai kártyákat -->
-      </div>
-    </section>
-
-  </main>
-
-  <!-- RÉSZLETES ÚTIKALAUZ MODÁLIS ABLAK -->
-  <div class="modal-backdrop" id="tour-detail-modal">
-    <div class="modal-content">
-      <button class="modal-close-btn" id="modal-close-btn" aria-label="Bezárás">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div id="modal-dynamic-content">
-        <!-- Dinamikus tartalom -->
       </div>
     </div>
   </div>
 
-  <!-- LÁBLÉC -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p><strong>Dolomitok Expedíció 2026</strong> &bull; Készült a 4 napos utazási terv (10 fős csapat) alapján</p>
-      <p style="font-size:0.8rem;color:var(--text-muted);">
-        Cortina d'Ampezzo bázis &bull; Tre Cime di Lavaredo &bull; Sella &amp; Pisciadù &bull; Seceda &amp; Val di Funes
+  <!-- EXPEDÍCIÓK VÁLASZTÓ SZEKCIÓ -->
+  <main class="portal-section" id="expeditions">
+    <div class="portal-section-header">
+      <div class="portal-section-badge">
+        <i class="fa-solid fa-location-dot"></i> Elérhető és Tervezett Utazások
+      </div>
+      <h2 class="portal-section-title">Válassz Túrát vagy Expedíciót</h2>
+      <p class="portal-section-desc">
+        Kattints az aktív túrakártyára a teljes interaktív térkép, időrendi bontás és terepi kalauz megnyitásához!
       </p>
     </div>
+
+    <div class="expeditions-grid">
+
+      <!-- 1. KÁRTYA: DOLOMITOK (AKTÍV ÉS ÉLŐ!) -->
+      <article class="expedition-card featured">
+        <div class="expedition-card-media">
+          <img src="hero_tre_cime.jpg" alt="Dolomitok Expedíció - Tre Cime" class="expedition-card-img" loading="lazy">
+          <div class="expedition-card-overlay"></div>
+          <div class="status-badge live">
+            <span class="pulse-dot"></span>
+            <span>ÉLŐ / AKTÍV TÚRATERV</span>
+          </div>
+        </div>
+
+        <div class="expedition-card-body">
+          <div class="expedition-meta-chips">
+            <span class="meta-chip"><i class="fa-solid fa-flag"></i> Olaszország</span>
+            <span class="meta-chip"><i class="fa-solid fa-campground"></i> Cortina Bázis</span>
+            <span class="meta-chip"><i class="fa-solid fa-calendar-days"></i> 4 Napos</span>
+            <span class="meta-chip"><i class="fa-solid fa-users"></i> 10 Fő (4 Mászó &bull; 6 Túrázó)</span>
+          </div>
+
+          <h3 class="expedition-title">🏔️ Dolomitok Expedíció: 4 Napos Kalandterv</h3>
+          <p class="expedition-desc">
+            Komplett, logisztikailag összehangolt alpesi csillagtúra a Dolomitok szívében. Párhuzamos programok via ferrata sziklamászóknak és fotós-túrázóknak, délutáni közös hüttézésekkel és naplementékkel.
+          </p>
+
+          <ul class="expedition-highlights-list">
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-check"></i>
+              <span><strong>Mászók:</strong> VF Michielli-Strobel, VF DeLuca-Innerkofler, VF Pisciadù, Piccolo Cir</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-check"></i>
+              <span><strong>Túrázók:</strong> Tre Cime körtúra, Cadini di Misurina, Seceda gerinc, Lago di Braies</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-check"></i>
+              <span><strong>Felszereltség:</strong> 12 GPX nyomvonal, valós szintrajzok, Waze parkolók, élő EUR árfolyam</span>
+            </li>
+          </ul>
+
+          <div class="expedition-card-footer">
+            <a href="dolomitok.html" class="btn-open-tour">
+              <span>Expedíció Megnyitása</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. KÁRTYA: DÜRRE WAND & PLATTENSTEIN (AKTÍV ÉS ÉLŐ!) -->
+      <article class="expedition-card featured">
+        <div class="expedition-card-media">
+          <img src="durrewand/images/durre-wand-plattenstein.jpg" alt="Dürre Wand és Plattenstein" class="expedition-card-img" loading="lazy">
+          <div class="expedition-card-overlay"></div>
+          <div class="status-badge live">
+            <span class="pulse-dot"></span>
+            <span>ÉLŐ / AKTÍV TÚRATERV</span>
+          </div>
+        </div>
+
+        <div class="expedition-card-body">
+          <div class="expedition-meta-chips">
+            <span class="meta-chip"><i class="fa-solid fa-flag"></i> Ausztria</span>
+            <span class="meta-chip"><i class="fa-solid fa-mountain"></i> Gutensteini-Alpok</span>
+            <span class="meta-chip"><i class="fa-solid fa-calendar-day"></i> 1 Napos Körtúra</span>
+            <span class="meta-chip"><i class="fa-solid fa-person-walking"></i> 9.1 km &bull; +656 m</span>
+            <span class="meta-chip"><i class="fa-solid fa-hotel"></i> Gauermannhütte 1154 m</span>
+          </div>
+
+          <h3 class="expedition-title">🌲 Dürre Wand &amp; Plattenstein (1154 m)</h3>
+          <p class="expedition-desc">
+            Vadregényes alpesi körtúra a Bécsi-Alpok mészkővonulatán Miesenbachból indulva. Látványos gerincösvény, közvetlen panoráma a hófödte Schneebergre és meleg konyha a Gauermannhüttében.
+          </p>
+
+          <ul class="expedition-highlights-list">
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-check"></i>
+              <span><strong>Főbb látványosságok:</strong> Plattenstein csúcskereszt, Tabler-barlang, Katharinenschlag</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-check"></i>
+              <span><strong>Hütte:</strong> Gauermannhütte (1154 m) panorámaterasz, meleg ételek (csak készpénz!)</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-check"></i>
+              <span><strong>Felszereltség:</strong> 322 pontos GPS magassági profil, GPX letöltés, fotógaléria és menetrend</span>
+            </li>
+          </ul>
+
+          <div class="expedition-card-footer">
+            <a href="durrewand/index.html" class="btn-open-tour">
+              <span>Túraterv Megnyitása</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. KÁRTYA: MAGAS-TÁTRA (HAMAROSAN) -->
+      <article class="expedition-card">
+        <div class="expedition-card-media">
+          <img src="hero_tofana.jpg" alt="Magas-Tátra Gerinctúrák" class="expedition-card-img" loading="lazy">
+          <div class="expedition-card-overlay"></div>
+          <div class="status-badge upcoming">
+            <i class="fa-solid fa-clock"></i>
+            <span>HAMAROSAN ÉRKEZIK</span>
+          </div>
+        </div>
+
+        <div class="expedition-card-body">
+          <div class="expedition-meta-chips">
+            <span class="meta-chip"><i class="fa-solid fa-flag"></i> Szlovákia</span>
+            <span class="meta-chip"><i class="fa-solid fa-mountain"></i> Magas-Tátra</span>
+            <span class="meta-chip"><i class="fa-solid fa-calendar-days"></i> 3-4 Nap</span>
+            <span class="meta-chip"><i class="fa-solid fa-link"></i> Láncos gerinctúrák</span>
+          </div>
+
+          <h3 class="expedition-title">⛰️ Magas-Tátra: Gerincek &amp; Tengerszemek</h3>
+          <p class="expedition-desc">
+            Klasszikus kárpáti magashegyi túrák láncos szakaszokkal, kitett hágókkal és tengerszemekkel. Rysy csúcshódítás, Kriván panoráma és a leghangulatosabb tátrai menedékházak.
+          </p>
+
+          <ul class="expedition-highlights-list">
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-mountain-sun"></i>
+              <span>Rysy 2 501 m (Szlovákia legmagasabb jelölt csúcsa)</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-water"></i>
+              <span>Csorba-tó, Poprádi-tó és a Hincó-tó környéke</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-house"></i>
+              <span>Hunyfalvy-hágó &amp; Chata pod Rysmi menedékház</span>
+            </li>
+          </ul>
+
+          <div class="expedition-card-footer">
+            <button type="button" class="btn-open-disabled" disabled>
+              <i class="fa-solid fa-lock"></i>
+              <span>Tervezés Folyamatban</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. KÁRTYA: JÚLIAI-ALPOK / TRIGLAV (HAMAROSAN) -->
+      <article class="expedition-card">
+        <div class="expedition-card-media">
+          <img src="hero_seceda.jpg" alt="Júliai-Alpok és Triglav" class="expedition-card-img" loading="lazy">
+          <div class="expedition-card-overlay"></div>
+          <div class="status-badge planning">
+            <i class="fa-solid fa-compass"></i>
+            <span>TERVEZÉS ALATT</span>
+          </div>
+        </div>
+
+        <div class="expedition-card-body">
+          <div class="expedition-meta-chips">
+            <span class="meta-chip"><i class="fa-solid fa-flag"></i> Szlovénia</span>
+            <span class="meta-chip"><i class="fa-solid fa-mountain"></i> Júliai-Alpok</span>
+            <span class="meta-chip"><i class="fa-solid fa-calendar-days"></i> 3 Nap</span>
+            <span class="meta-chip"><i class="fa-solid fa-person-hiking"></i> 2 864 m Csúcs</span>
+          </div>
+
+          <h3 class="expedition-title">🌲 Júliai-Alpok: Triglav Csúcstúra</h3>
+          <p class="expedition-desc">
+            Szlovénia nemzeti szimbólumának megmászása a Vrata-völgyből a Tominšek vagy Prag ferratán keresztül. Éjszaka a Triglavski domban és lenyűgöző mészkővilág.
+          </p>
+
+          <ul class="expedition-highlights-list">
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-flag-checkered"></i>
+              <span>Triglav 2 864 m csúcskereszt &amp; Aljaž-torony</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-route"></i>
+              <span>Tominšek-út és Čez Prag via ferrata szakaszok</span>
+            </li>
+            <li class="expedition-highlight-item">
+              <i class="fa-solid fa-gem"></i>
+              <span>Smaragdzöld Soča-völgy és Bohinji-tó levezetés</span>
+            </li>
+          </ul>
+
+          <div class="expedition-card-footer">
+            <button type="button" class="btn-open-disabled" disabled>
+              <i class="fa-solid fa-lock"></i>
+              <span>Tervezés Folyamatban</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. KÁRTYA: EGYEDI TÚRA IGÉNYLÉSE -->
+      <article class="expedition-card custom-request">
+        <div class="custom-icon">
+          <i class="fa-solid fa-map-pin"></i>
+        </div>
+        <h3 class="expedition-title">Új Túra Tervezése</h3>
+        <p class="expedition-desc">
+          Más útvonalat vagy saját expedíciót szeretnél felvenni a LordTúra rendszerébe? Készítünk hozzá interaktív Leaflet térképet, szintrajzot, GPX fájlokat és kalkulátort!
+        </p>
+        <span class="meta-chip" style="background:rgba(56,189,248,0.15);color:var(--accent-blue);border-color:rgba(56,189,248,0.3);margin-bottom:1rem;">
+          <i class="fa-solid fa-plus"></i> Bővíthető adatbázis
+        </span>
+        <div style="font-size:0.85rem;color:var(--text-muted);">
+          Kérd a fejlesztőtől az új túra geodéziai integrációját!
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- PLATFORM KÉPESSÉGEK -->
+  <section class="portal-features-section" id="features">
+    <div class="portal-section-header" style="margin-bottom: 2.5rem;">
+      <div class="portal-section-badge">
+        <i class="fa-solid fa-shield-halved"></i> Miért a LordTúra?
+      </div>
+      <h2 class="portal-section-title">Expedíciós Eszköztár Minden Hegyre</h2>
+      <p class="portal-section-desc">
+        A LordTúra túraoldalai nem egyszerű leírások, hanem valós terepi navigációs és logisztikai munkafelületek.
+      </p>
+    </div>
+
+    <div class="portal-features-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(56,189,248,0.15);color:#38bdf8;">
+          <i class="fa-solid fa-map"></i>
+        </div>
+        <h3>Valós GPS &amp; GPX Nyomvonalak</h3>
+        <p>12 digitális útvonal közvetlen letöltéssel és Leaflet térképes fókusszal. Mászó és túrázó csapatok egyértelmű szétválasztásával.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(16,185,129,0.15);color:#10b981;">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h3>Vektorgrafikus Szintrajzok</h3>
+        <p>Pontos digitális domborzatmodell (DEM) alapján generált SVG metszetek interaktív kurzorkövetéssel és magassági pontokkal.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b;">
+          <i class="fa-solid fa-cloud-bolt"></i>
+        </div>
+        <h3>Élő Időjárás &amp; Viharriasztás</h3>
+        <p>Csúcsmagassági Open-Meteo meteorológiai adatok és szigorú 13:00 utáni hegyi zivatarriasztó a drótköteles ferratákhoz.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(239,68,68,0.15);color:#ef4444;">
+          <i class="fa-solid fa-square-parking"></i>
+        </div>
+        <h3>1-Kattintásos Waze Navigáció</h3>
+        <p>Közvetlen indítás a hegyi rajthelyekhez, parkolási díjak, kapacitások és útdíj előírások részletes bemutatásával.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(168,85,247,0.15);color:#c084fc;">
+          <i class="fa-solid fa-coins"></i>
+        </div>
+        <h3>Élő Költségvetés Számoló</h3>
+        <p>Valós idejű bankközi EUR/HUF árfolyam, személyenkénti és csapatszintű kalkulációk szállással, liftekkel és étkezéssel.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon" style="background:rgba(20,184,166,0.15);color:#2dd4bf;">
+          <i class="fa-solid fa-clipboard-check"></i>
+        </div>
+        <h3>Menthető Felszereléslista</h3>
+        <p>Böngészőben elmenthető állapotú csekklista ferrata mászóknak és túrázóknak a terepi biztonság garantálására.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LÁBLÉC -->
+  <footer class="portal-footer">
+    <div class="portal-footer-brand">
+      <i class="fa-solid fa-mountain-sun" style="color:var(--accent-blue);"></i>
+      <span>LordTúra</span>
+    </div>
+    <p>Prémium Hegyi Expedíciók &bull; Valós Geodéziai Túratervek &bull; Terepi Portál</p>
+    <div class="portal-footer-links">
+      <a href="#expeditions"><i class="fa-solid fa-route"></i> Túratervek</a>
+      <a href="dolomitok.html"><i class="fa-solid fa-mountain"></i> Dolomitok 4D</a>
+      <a href="tel:118"><i class="fa-solid fa-truck-medical"></i> SOS Hegyi Mentők: 118</a>
+      <a href="tel:112"><i class="fa-solid fa-phone"></i> EU Segélyhívó: 112</a>
+    </div>
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1.5rem;">
+      &copy; 2026 LordTúra &bull; Minden jog fenntartva
+    </p>
   </footer>
 
-  <!-- MOBIL ALSÓ GYORSSÁV (BOTTOM NAV) -->
-  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Alsó gyorsnavigáció">
-    <button class="bottom-nav-item active" data-section="tours-section">
-      <i class="fa-solid fa-map-location-dot"></i>
-      <span>Térkép</span>
-    </button>
-    <button class="bottom-nav-item" data-section="timeline-section">
-      <i class="fa-solid fa-clock"></i>
-      <span>Időrend</span>
-    </button>
-    <button class="bottom-nav-item" onclick="scrollToCurrentElevation()">
-      <i class="fa-solid fa-chart-area"></i>
-      <span>Szintrajz</span>
-    </button>
-    <button class="bottom-nav-item" data-section="checklist-section">
-      <i class="fa-solid fa-list-check"></i>
-      <span>Csomag</span>
-    </button>
-    <button class="bottom-nav-item" id="bottom-menu-trigger">
-      <i class="fa-solid fa-bars"></i>
-      <span>Menü</span>
-    </button>
-  </nav>
-
-  <!-- LEBEGŐ GOMB: GYORS UGRÁS A TÉRKÉPHEZ / TETEJÉRE -->
-  <button class="floating-map-jump-btn" id="floating-map-jump-btn" onclick="scrollToMapOrTop()" title="Ugrás a térképhez" aria-label="Ugrás a térképhez">
-    <i class="fa-solid fa-map"></i>
-  </button>
-
-  <!-- Leaflet Map JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-  <!-- Alkalmazás Adatok & Szkriptek -->
-  <script src="data.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>

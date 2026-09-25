@@ -1,15 +1,31 @@
-# 🏔️ Dolomitok Expedíció – Projekt Összefoglaló és Üzemeltetési Útmutató
+# 🏔️ LordTúra – Projekt Összefoglaló és Üzemeltetési Útmutató
 
-Ez a dokumentum részletesen összefoglalja a **4 napos Dolomitok Expedíció** webes projektjét, a feldolgozott túra- és geodéziai adatokat, a beépített **valós geodéziai szintrajzokat**, a **teljes körű mobilbarát felületet (oldalsó menü, alsó navigáció, SOS hívók)**, valamint a **Raspberry Pi** alapú éles kiszolgáló és a **Tailscale Funnel** architektúráját.
+Ez a dokumentum részletesen összefoglalja a **LordTúra** hegyi és alpesi expedíciós portált, a feldolgozott túra- és geodéziai adatokat (Dolomitok 4 napos kalandterv és további hegyi útvonalak), a beépített **valós geodéziai szintrajzokat**, a **teljes körű mobilbarát felületet (oldalsó menü, alsó navigáció, SOS hívók)**, valamint a **Raspberry Pi** alapú éles kiszolgáló és a **Tailscale Funnel** architektúráját.
 
 ---
 
-## 📌 1. Projekt Áttekintés & Célkitűzés
+## 📌 1. Projekt Áttekintés & Portál Architektúra (Többtúrás Rendszer)
 
-* **Kiindulási alap:** `dolomitok_4napos_utazasi_terv.pdf`
-* **Célcsoport:** 10 fős csapat (4 tapasztaltabb via ferrata sziklamászó + 6 panorámatúrázó/fotós)
-* **Közös bázis:** Cortina d'Ampezzo környéke (4 éjszaka, csillagtúrák)
-* **Megvalósítás:** Reszponzív, modern alpesi sötét dizájnú webes alkalmazás valós térképpel, GPS nyomvonalakkal, interaktív szintrajzokkal (magasságprofil), költségvetés számolóval, csomagolási listával és publikus internetes kiszolgálással.
+A **LordTúra** egy moduláris, több hegyi expedíciót és túratervet kiszolgáló webes portálrendszerré bővült:
+
+1. **LordTúra Kezdőlap (Hub / Portál - `index.html`):**
+   * **Központi választófelület:** Látványos, modern kezdőlap drónvideós háttérrel, statisztikai mutatókkal és túrakártyákkal.
+   * **Aktív expedíciók:**
+     * 🏔️ **Dolomitok Expedíció – 4 Napos Kalandterv** (`dolomitok.html`) &bull; *Élő, 10 fős csapat, 12 valós túra, GPX, szintrajzok, hütte kalauz, parkolók.*
+     * 🌲 **Dürre Wand &amp; Plattenstein (1154 m)** (`durrewand/index.html`) &bull; *Élő, 1 napos alsó-ausztriai alpesi körtúra, Miesenbach, Gauermannhütte (1154 m), Schneeberg panoráma, 9.1 km, +656 m szint, 322 pontos GPS profil.*
+   * **Tervezés alatt álló túratervek:**
+     * ⛰️ **Magas-Tátra:** Gerinctúrák, tengerszemek &amp; láncos utak (Rysy, Kriván).
+     * 🌲 **Júliai-Alpok:** Triglav csúcshódítás (2 864 m) a Vrata-völgyből.
+     * ➕ **Új túra tervezése:** Felvételi lehetőség egyedi túrákhoz és csoportokhoz.
+   * **Expedíciós eszköztár áttekintése:** GPS nyomvonalak, szintrajzok, élő időjárás, Waze parkolók, kalkulátor, csekklista.
+
+2. **Dolomitok Expedíció Részletes Rendszer (`dolomitok.html`):**
+   * A teljes körű, 4 napos alpesi expedíció interaktív felülete (10 fős csapat: 4 via ferrata mászó &amp; 6 panorámatúrázó/fotós).
+   * Beépített **„← Kezdőlap”** és **„🌲 Plattenstein”** gombok az asztali navigációban és a mobil oldalsó menüben a zökkenőmentes átjárhatósághoz.
+
+3. **Dürre Wand &amp; Plattenstein Rendszer (`durrewand/`):**
+   * 1 napos alpesi túra a Bécsi-Alpokban (Gutensteini-Alpok) 25 nagyfelbontású fotóval, Gauermannhütte kalauzzal és SOS 140 hegyimentő hívóval.
+   * Kétirányú átjárhatóság: felső sávban közvetlen ugrás a **LordTúra Kezdőlapra** és a **Dolomitok 4D** túrára.
 
 ---
 
@@ -198,7 +214,13 @@ A weboldal a helyi hálózaton futó Raspberry Pi 4-en üzemel, ahonnan a **Tail
 * **Webkönyvtár a Pi-n:** `/home/milan/dolomitok-web`
 * **Systemd Szolgáltatás:** `dolomitok-web.service` (Python 3 HTTP szerver a 8080-as porton)
 * **Tailscale Funnel:** 443 -> 8080
-* 🌐 **Nyilvános Éles URL:** **`https://dolomitoktura.tail35f0de.ts.net/`**
+* 🌐 **Nyilvános Éles URL:** **`https://lordtura.tail35f0de.ts.net/`**
+* **Gépnév módosítása a Pi-n (ha még 'dolomitoktura' néven fut):**
+  ```bash
+  sudo tailscale set --hostname=lordtura
+  sudo tailscale serve --bg 8080
+  sudo tailscale funnel 443 on
+  ```
 * **Tanúsítvány:** Let's Encrypt TLS (automatikus HTTPS titkosítás)
 
 ---
