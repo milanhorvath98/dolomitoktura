@@ -1,46 +1,88 @@
 /* ==========================================================================
-   DÜRRE WAND & PLATTENSTEIN TÚRA - STYLESHEET
-   Modern Alpine Dark Glassmorphism Theme (Consistent with Dolomitok Expedíció)
+   DÜRRE WAND & PLATTENSTEIN TÚRA - NEUMORPHISM / SOFT UI STYLESHEET
+   Figma 2026 Trend 8: Soft 3D Elevation • Dual Light/Dark Shadows • Tactile Wells
    ========================================================================== */
 
 :root {
-  --bg-primary: #070b12;
-  --bg-secondary: #0d1522;
-  --bg-card: rgba(15, 23, 42, 0.78);
-  --bg-card-hover: rgba(24, 37, 66, 0.88);
-  --bg-glass: rgba(13, 21, 34, 0.85);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(16, 185, 129, 0.4);
-  
-  --emerald-500: #10b981;
-  --emerald-400: #34d399;
-  --emerald-600: #059669;
-  --emerald-glow: rgba(16, 185, 129, 0.25);
-  
-  --amber-500: #f59e0b;
-  --amber-400: #fbbf24;
-  --amber-glow: rgba(245, 158, 11, 0.25);
-  
-  --cyan-500: #06b6d4;
-  --cyan-400: #22d3ee;
-  
-  --red-500: #ef4444;
-  --red-glow: rgba(239, 68, 68, 0.3);
-  
-  --text-primary: #f8fafc;
+  --bg-primary: #e6ecf5;
+  --bg-secondary: #e6ecf5;
+  --bg-card: #e6ecf5;
+  --bg-card-hover: #eaf0f9;
+  --bg-glass: rgba(230, 236, 245, 0.88);
+
+  --neu-shadow-dark: rgba(163, 177, 198, 0.65);
+  --neu-shadow-light: rgba(255, 255, 255, 0.95);
+  --neu-shadow-dark-sm: rgba(163, 177, 198, 0.5);
+  --neu-shadow-light-sm: rgba(255, 255, 255, 0.9);
+  --neu-border: rgba(255, 255, 255, 0.55);
+
+  --neu-inset-dark: rgba(163, 177, 198, 0.6);
+  --neu-inset-light: rgba(255, 255, 255, 0.85);
+
+  --shadow-sm: 4px 4px 10px var(--neu-shadow-dark-sm), -4px -4px 10px var(--neu-shadow-light-sm);
+  --shadow-md: 7px 7px 16px var(--neu-shadow-dark), -7px -7px 16px var(--neu-shadow-light);
+  --shadow-lg: 10px 10px 24px var(--neu-shadow-dark), -10px -10px 24px var(--neu-shadow-light);
+  --shadow-inset: inset 4px 4px 8px var(--neu-inset-dark), inset -4px -4px 8px var(--neu-inset-light);
+  --shadow-inset-sm: inset 2px 2px 5px var(--neu-inset-dark), inset -2px -2px 5px var(--neu-inset-light);
+
+  --border-subtle: rgba(255, 255, 255, 0.6);
+  --border-focus: rgba(5, 150, 105, 0.4);
+
+  --emerald-500: #059669;
+  --emerald-400: #10b981;
+  --emerald-600: #047857;
+  --emerald-glow: rgba(5, 150, 105, 0.25);
+
+  --amber-500: #d97706;
+  --amber-400: #f59e0b;
+  --amber-glow: rgba(217, 119, 6, 0.25);
+
+  --cyan-500: #0284c7;
+  --cyan-400: #0ea5e9;
+
+  --red-500: #e11d48;
+  --red-glow: rgba(225, 29, 72, 0.25);
+
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  --font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', 'Courier New', monospace;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #181d26;
+  --bg-secondary: #181d26;
+  --bg-card: #181d26;
+  --bg-card-hover: #1c222c;
+  --bg-glass: rgba(24, 29, 38, 0.9);
+
+  --neu-shadow-dark: #0f1218;
+  --neu-shadow-light: #212834;
+  --neu-shadow-dark-sm: #11141b;
+  --neu-shadow-light-sm: #1f2531;
+  --neu-border: rgba(255, 255, 255, 0.05);
+
+  --neu-inset-dark: #0f1218;
+  --neu-inset-light: #212834;
+
+  --shadow-sm: 4px 4px 10px var(--neu-shadow-dark-sm), -4px -4px 10px var(--neu-shadow-light-sm);
+  --shadow-md: 7px 7px 18px var(--neu-shadow-dark), -7px -7px 18px var(--neu-shadow-light);
+  --shadow-lg: 11px 11px 26px var(--neu-shadow-dark), -11px -11px 26px var(--neu-shadow-light);
+  --shadow-inset: inset 4px 4px 8px var(--neu-inset-dark), inset -4px -4px 8px var(--neu-inset-light);
+  --shadow-inset-sm: inset 2px 2px 5px var(--neu-inset-dark), inset -2px -2px 5px var(--neu-inset-light);
+
+  --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
-  
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-  --shadow-emerald: 0 8px 25px rgba(16, 185, 129, 0.25);
 }
 
 *, *::before, *::after {
@@ -56,16 +98,14 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  background-image: none !important;
 }
 
-/* ==========================================================================
-   CROSS-PROJECT BANNER (TOP ALERT)
-   ========================================================================== */
 .top-cross-bar {
   background: linear-gradient(90deg, #064e3b, #0f172a 40%, #1e1b4b 100%);
   border-bottom: 1px solid rgba(16, 185, 129, 0.2);
@@ -1934,3 +1974,138 @@ body {
   }
 }
 
+
+/* ==========================================================================
+   NEUMORPHISM / SOFT UI OVERRIDES FOR DÜRRE WAND
+   ========================================================================== */
+.top-cross-bar {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+.top-cross-bar a {
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  background: var(--bg-primary) !important;
+  padding: 4px 14px !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-weight: 700 !important;
+}
+.top-cross-bar a:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--emerald-500) !important;
+}
+
+.main-nav {
+  background: var(--bg-glass) !important;
+  border-bottom: 1px solid var(--neu-border) !important;
+  box-shadow: 0 8px 24px var(--neu-shadow-dark-sm) !important;
+  backdrop-filter: blur(14px) !important;
+}
+.nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  padding: 0.45rem 0.95rem !important;
+  border-radius: var(--radius-full) !important;
+  transition: var(--transition) !important;
+}
+.nav-link:hover {
+  background: var(--bg-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--emerald-500) !important;
+}
+.nav-link.active {
+  background: var(--bg-primary) !important;
+  color: var(--emerald-500) !important;
+  box-shadow: var(--shadow-inset) !important;
+  font-weight: 800 !important;
+}
+
+.btn-gpx-quick {
+  background: var(--bg-primary) !important;
+  color: var(--emerald-500) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: 700 !important;
+  transition: var(--transition) !important;
+}
+.btn-gpx-quick:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--emerald-400) !important;
+}
+.btn-gpx-quick:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.hero {
+  border-bottom: 1px solid var(--neu-border) !important;
+}
+.hero-title {
+  font-weight: 900 !important;
+  letter-spacing: -0.5px !important;
+}
+.stat-pill {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.45rem 1rem !important;
+}
+
+.trail-card, .elevation-card, .schedule-card, .packing-card, .weather-card, .logistics-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-primary) !important;
+  transition: var(--transition) !important;
+}
+.trail-card:hover, .elevation-card:hover, .schedule-card:hover, .packing-card:hover, .weather-card:hover, .logistics-card:hover {
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-2px) !important;
+}
+
+.elevation-card {
+  box-shadow: var(--shadow-inset) !important;
+}
+
+.map-wrapper {
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+
+.gallery-grid img {
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: var(--radius-md) !important;
+  transition: var(--transition) !important;
+}
+.gallery-grid img:hover {
+  box-shadow: var(--shadow-md) !important;
+  transform: scale(1.02) !important;
+}
+
+.mobile-bottom-nav {
+  background: var(--bg-secondary) !important;
+  border-top: 1px solid var(--neu-border) !important;
+  box-shadow: 0 -8px 24px var(--neu-shadow-dark-sm) !important;
+}
+.bottom-nav-item.active {
+  background: var(--bg-secondary) !important;
+  color: var(--emerald-500) !important;
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.footer {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-top: 1px solid var(--neu-border) !important;
+  box-shadow: inset 0 8px 18px var(--neu-shadow-dark-sm) !important;
+}

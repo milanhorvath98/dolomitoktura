@@ -1,50 +1,110 @@
 /* ==========================================================================
-   Dolomitok Expedíció - Modern Alpesi Design Rendszer
+   LORDTÚRA - NEUMORPHISM / SOFT UI DESIGN SYSTEM (FIGMA 2026 TREND 8)
+   Organic Tactile Surfaces • Dual Light/Dark Shadows • Extruded & Inset Elements
    ========================================================================== */
 
 :root {
-  --font-main: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-main: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', 'Courier New', monospace;
+  --font-heading: 'Outfit', sans-serif;
+
+  /* Neumorphic Core Colors (Default Light Soft UI) */
+  --bg-main: #e6ecf5;
+  --bg-surface: #e6ecf5;
+  --bg-card: #e6ecf5;
+  --bg-card-hover: #eaf0f9;
+  --bg-glass: rgba(230, 236, 245, 0.88);
   
-  /* Dolomite Színpaletta */
-  --bg-main: #0b1120;
-  --bg-surface: #131d31;
-  --bg-card: rgba(24, 37, 63, 0.85);
-  --bg-card-hover: rgba(32, 49, 82, 0.95);
-  --bg-glass: rgba(19, 29, 49, 0.75);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(56, 189, 248, 0.25);
+  /* Neumorphic Dual Shadows (Light & Dark pair for extruded 3D effect) */
+  --neu-shadow-dark: rgba(163, 177, 198, 0.65);
+  --neu-shadow-light: rgba(255, 255, 255, 0.95);
+  --neu-shadow-dark-sm: rgba(163, 177, 198, 0.5);
+  --neu-shadow-light-sm: rgba(255, 255, 255, 0.9);
+  --neu-border: rgba(255, 255, 255, 0.55);
   
-  --text-primary: #f8fafc;
+  --neu-inset-dark: rgba(163, 177, 198, 0.6);
+  --neu-inset-light: rgba(255, 255, 255, 0.85);
+
+  --shadow-sm: 4px 4px 10px var(--neu-shadow-dark-sm), -4px -4px 10px var(--neu-shadow-light-sm);
+  --shadow-md: 7px 7px 16px var(--neu-shadow-dark), -7px -7px 16px var(--neu-shadow-light);
+  --shadow-lg: 10px 10px 24px var(--neu-shadow-dark), -10px -10px 24px var(--neu-shadow-light);
+  --shadow-xl: 14px 14px 32px var(--neu-shadow-dark), -14px -14px 32px var(--neu-shadow-light);
+  --shadow-inset: inset 4px 4px 8px var(--neu-inset-dark), inset -4px -4px 8px var(--neu-inset-light);
+  --shadow-inset-sm: inset 2px 2px 5px var(--neu-inset-dark), inset -2px -2px 5px var(--neu-inset-light);
+
+  --border-subtle: rgba(255, 255, 255, 0.6);
+  --border-glow: rgba(56, 189, 248, 0.35);
+
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  /* Team & Category Alpine Neumorphic Accents */
+  --climber-color: #f43f5e;
+  --climber-glow: rgba(244, 63, 94, 0.3);
+  --climber-bg: #fee2e2;
+
+  --hiker-color: #059669;
+  --hiker-glow: rgba(5, 150, 105, 0.3);
+  --hiker-bg: #d1fae5;
+
+  --joint-color: #d97706;
+  --joint-glow: rgba(217, 119, 6, 0.3);
+  --joint-bg: #fef3c7;
+
+  --accent-blue: #0284c7;
+  --accent-cyan: #0ea5e9;
+  --accent-gold: #d97706;
+  --accent-yellow: #eab308;
+  --accent-purple: #7c3aed;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Neumorphism Mode */
+[data-theme="dark"] {
+  --bg-main: #181d26;
+  --bg-surface: #181d26;
+  --bg-card: #181d26;
+  --bg-card-hover: #1c222c;
+  --bg-glass: rgba(24, 29, 38, 0.9);
+
+  --neu-shadow-dark: #0f1218;
+  --neu-shadow-light: #212834;
+  --neu-shadow-dark-sm: #11141b;
+  --neu-shadow-light-sm: #1f2531;
+  --neu-border: rgba(255, 255, 255, 0.05);
+
+  --neu-inset-dark: #0f1218;
+  --neu-inset-light: #212834;
+
+  --shadow-sm: 4px 4px 10px var(--neu-shadow-dark-sm), -4px -4px 10px var(--neu-shadow-light-sm);
+  --shadow-md: 7px 7px 18px var(--neu-shadow-dark), -7px -7px 18px var(--neu-shadow-light);
+  --shadow-lg: 11px 11px 26px var(--neu-shadow-dark), -11px -11px 26px var(--neu-shadow-light);
+  --shadow-xl: 15px 15px 36px var(--neu-shadow-dark), -15px -15px 36px var(--neu-shadow-light);
+  --shadow-inset: inset 4px 4px 8px var(--neu-inset-dark), inset -4px -4px 8px var(--neu-inset-light);
+  --shadow-inset-sm: inset 2px 2px 5px var(--neu-inset-dark), inset -2px -2px 5px var(--neu-inset-light);
+
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-glow: rgba(14, 165, 233, 0.35);
+
+  --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  
-  /* Csapat & Típus Színek */
-  --climber-color: #ef4444;
-  --climber-glow: rgba(239, 68, 68, 0.35);
-  --climber-bg: rgba(239, 68, 68, 0.12);
-  
-  --hiker-color: #10b981;
-  --hiker-glow: rgba(16, 185, 129, 0.35);
-  --hiker-bg: rgba(16, 185, 129, 0.12);
-  
-  --joint-color: #f59e0b;
-  --joint-glow: rgba(245, 158, 11, 0.35);
-  --joint-bg: rgba(245, 158, 11, 0.12);
-  
-  --accent-blue: #38bdf8;
-  --accent-gold: #fbbf24;
-  
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 24px var(--border-glow);
-  
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
-  
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --climber-color: #fb7185;
+  --climber-bg: rgba(251, 113, 133, 0.15);
+
+  --hiker-color: #34d399;
+  --hiker-bg: rgba(52, 211, 153, 0.15);
+
+  --joint-color: #fbbf24;
+  --joint-bg: rgba(251, 191, 36, 0.15);
 }
 
 * {
@@ -59,21 +119,16 @@ html {
 
 body {
   font-family: var(--font-main);
-  background-color: var(--bg-main);
-  color: var(--text-primary);
+  background-color: var(--bg-main) !important;
+  color: var(--text-primary) !important;
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%);
+  background-image: none !important;
 }
 
-/* ==========================================================================
-   Fejléc & Hero Szekció (Dinamikus Diavetítés & Drónvideó)
-   ========================================================================== */
+
 .hero {
   position: relative;
   padding: 4.5rem 1.5rem 3.5rem;
@@ -3817,4 +3872,600 @@ body {
   gap: 0.5rem;
 }
 
+/* ==========================================================================
+   LORDTÚRA - NEUMORPHISM / SOFT UI OVERHAUL (FIGMA 2026 TREND 8)
+   ========================================================================== */
 
+/* 1. TOP CROSS-TOUR NAVIGATION TICKER */
+.top-cross-bar {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 9px 20px !important;
+  font-size: 0.86rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  z-index: 10000 !important;
+  position: relative !important;
+}
+
+.top-cross-bar a {
+  color: var(--text-primary) !important;
+  text-decoration: none !important;
+  border: 1px solid var(--neu-border) !important;
+  background: var(--bg-surface) !important;
+  padding: 4px 14px !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: var(--transition) !important;
+  font-weight: 700 !important;
+}
+
+.top-cross-bar a:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--accent-blue) !important;
+}
+
+.top-cross-bar a:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+/* 2. STICKY MAIN NAVIGATION BAR */
+.main-nav {
+  background: var(--bg-glass) !important;
+  border-bottom: 1px solid var(--neu-border) !important;
+  box-shadow: 0 8px 24px var(--neu-shadow-dark-sm) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.nav-brand {
+  color: var(--text-primary) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.3px !important;
+}
+
+.nav-brand i {
+  color: var(--accent-blue) !important;
+  padding: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--neu-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-tab {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 0.5rem 1rem !important;
+  transition: var(--transition) !important;
+}
+
+.nav-tab:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--text-primary) !important;
+}
+
+.nav-tab.active {
+  background: var(--bg-surface) !important;
+  color: var(--accent-blue) !important;
+  font-weight: 800 !important;
+  box-shadow: var(--shadow-inset) !important;
+  border-color: rgba(2, 132, 199, 0.25) !important;
+}
+
+/* Neumorphic Theme Switcher Button */
+.neo-theme-toggle {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  color: var(--text-primary) !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  font-family: var(--font-main) !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: var(--shadow-sm) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  transition: var(--transition) !important;
+}
+
+.neo-theme-toggle:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--accent-blue) !important;
+}
+
+.neo-theme-toggle:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+/* 3. HERO SECTION & CONTROLS */
+.hero {
+  border-bottom: 1px solid var(--neu-border) !important;
+}
+
+.hero-title {
+  font-weight: 900 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.hero-badge-group .badge {
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-family: var(--font-main) !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.45rem 1rem !important;
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  transform: none !important;
+}
+
+.hero-badge-group .badge:nth-child(1) { color: var(--accent-yellow) !important; }
+.hero-badge-group .badge:nth-child(2) { color: var(--climber-color) !important; }
+.hero-badge-group .badge:nth-child(3) { color: var(--hiker-color) !important; }
+.hero-badge-group .badge:nth-child(4) { color: var(--joint-color) !important; }
+.hero-badge-group .badge:nth-child(5) { color: var(--accent-cyan) !important; }
+
+.hero-photo-tag {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+}
+
+.hero-photo-tag:hover {
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--accent-blue) !important;
+}
+
+.hero-photo-tag:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.hero-ctrl-btn {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: 50% !important;
+  transition: var(--transition) !important;
+}
+
+.hero-ctrl-btn:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--accent-blue) !important;
+}
+
+.hero-ctrl-btn:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.hero-stats-grid .stat-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-primary) !important;
+}
+
+.hero-stats-grid .stat-card .stat-icon {
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: 14px !important;
+  background: var(--bg-surface) !important;
+}
+
+.hero-stats-grid .stat-card .stat-icon.climber { color: var(--climber-color) !important; }
+.hero-stats-grid .stat-card .stat-icon.hiker { color: var(--hiker-color) !important; }
+.hero-stats-grid .stat-card .stat-icon.base { color: var(--joint-color) !important; }
+
+/* 4. INTERACTIVE MAP SECTION */
+.map-section-wrapper {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-xl) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+
+.map-control-bar {
+  background: var(--bg-surface) !important;
+  border-bottom: 1px solid var(--neu-border) !important;
+  padding: 1rem 1.4rem !important;
+}
+
+.filter-btn {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  color: var(--text-secondary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.45rem 1rem !important;
+  transition: var(--transition) !important;
+}
+
+.filter-btn:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--text-primary) !important;
+}
+
+.filter-btn:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.filter-btn.active {
+  background: var(--bg-surface) !important;
+  box-shadow: var(--shadow-inset) !important;
+  font-weight: 800 !important;
+}
+
+.filter-btn.active[data-filter="day-all"],
+.filter-btn.active[data-filter="team-all"] {
+  color: var(--accent-blue) !important;
+}
+
+.filter-btn.active[data-filter="climber"] {
+  color: var(--climber-color) !important;
+}
+
+.filter-btn.active[data-filter="hiker"] {
+  color: var(--hiker-color) !important;
+}
+
+/* Leaflet Popups Neumorphic Styling */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-surface) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.leaflet-control-zoom a, .leaflet-control-fullscreen a {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+}
+
+/* 5. DAY-BY-DAY SECTIONS & TOUR CARDS */
+.day-tab-btn {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.65rem 1.4rem !important;
+  transition: var(--transition) !important;
+}
+
+.day-tab-btn:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--text-primary) !important;
+}
+
+.day-tab-btn.active {
+  background: var(--bg-surface) !important;
+  color: var(--accent-blue) !important;
+  box-shadow: var(--shadow-inset) !important;
+  font-weight: 800 !important;
+}
+
+.day-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 2.25rem !important;
+}
+
+.day-card-header {
+  border-bottom: 1px solid var(--neu-border) !important;
+}
+
+.tour-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-md) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: var(--transition) !important;
+}
+
+.tour-card:hover {
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-2px) !important;
+}
+
+.tour-card.climber {
+  border-top: 4px solid var(--climber-color) !important;
+}
+
+.tour-card.hiker {
+  border-top: 4px solid var(--hiker-color) !important;
+}
+
+.tour-card.joint {
+  border-top: 4px solid var(--joint-color) !important;
+}
+
+.tour-specs-grid {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-inset-sm) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.85rem !important;
+}
+
+.spec-val {
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+}
+
+.spec-label {
+  font-size: 0.72rem !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  color: var(--text-muted) !important;
+}
+
+.btn-details, .btn-gpx, .btn-map-jump, .btn-sm {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.5rem 1rem !important;
+  transition: var(--transition) !important;
+}
+
+.btn-details:hover, .btn-gpx:hover, .btn-map-jump:hover, .btn-sm:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+  color: var(--accent-blue) !important;
+}
+
+.btn-details:active, .btn-gpx:active, .btn-map-jump:active, .btn-sm:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.btn-climber {
+  color: var(--climber-color) !important;
+}
+
+.btn-hiker {
+  color: var(--hiker-color) !important;
+}
+
+/* 6. ELEVATION PROFILES (MOLDED EMBOSSED INSTRUMENT PANEL) */
+.elevation-profile-container {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-inset) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 1.25rem !important;
+}
+
+.elevation-profile-title {
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+}
+
+.elevation-stat-tag {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.2rem 0.65rem !important;
+  font-weight: 600 !important;
+}
+
+.elevation-floating-tooltip {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  font-weight: 800 !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* 7. TIMELINE, BUDGET, CHECKLIST, LOGISTICS */
+.timeline-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.timeline-badge {
+  background: var(--bg-surface) !important;
+  color: var(--accent-blue) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-inset-sm) !important;
+  font-weight: 800 !important;
+  border-radius: var(--radius-full) !important;
+}
+
+.budget-calculator-grid .budget-card,
+.budget-summary-box,
+.checklist-card,
+.logistics-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.budget-summary-box {
+  background: var(--bg-surface) !important;
+  box-shadow: var(--shadow-inset) !important;
+  color: var(--text-primary) !important;
+}
+
+.budget-calculator-card input,
+.budget-calculator-card select {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-inset-sm) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-primary) !important;
+  padding: 0.65rem 0.9rem !important;
+}
+
+/* Custom Checkbox Neumorphic Style */
+.checklist-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--neu-border);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-inset-sm);
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  transition: var(--transition);
+}
+
+.checklist-item input[type="checkbox"]:checked {
+  background: var(--hiker-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.checklist-item input[type="checkbox"]:checked::before {
+  content: "✔";
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+/* 8. WEATHER, WEBCAMS, HUTS, PARKING HUBS */
+.weather-card,
+.webcam-card,
+.hut-card,
+.parking-card,
+.gpx-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+  transition: var(--transition) !important;
+}
+
+.weather-card:hover,
+.webcam-card:hover,
+.hut-card:hover,
+.parking-card:hover,
+.gpx-card:hover {
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* 9. MODAL & MOBILE NAVIGATION */
+.modal-content {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-xl) !important;
+  border-radius: var(--radius-lg) !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-close-btn {
+  background: var(--bg-surface) !important;
+  color: var(--climber-color) !important;
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: 50% !important;
+}
+
+.modal-close-btn:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+}
+
+.modal-close-btn:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.mobile-bottom-nav {
+  background: var(--bg-surface) !important;
+  border-top: 1px solid var(--neu-border) !important;
+  box-shadow: 0 -8px 24px var(--neu-shadow-dark-sm) !important;
+}
+
+.bottom-nav-item {
+  border-radius: var(--radius-sm) !important;
+  transition: var(--transition) !important;
+}
+
+.bottom-nav-item.active {
+  background: var(--bg-surface) !important;
+  color: var(--accent-blue) !important;
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.mobile-drawer {
+  background: var(--bg-surface) !important;
+  border-right: 1px solid var(--neu-border) !important;
+  box-shadow: 8px 0 24px var(--neu-shadow-dark) !important;
+}
+
+.sos-btn {
+  border: 1px solid var(--neu-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 700 !important;
+  transition: var(--transition) !important;
+}
+
+.sos-btn:hover {
+  box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light) !important;
+}
+
+.sos-btn:active {
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+.sos-btn.emergency {
+  background: var(--climber-color) !important;
+  color: #ffffff !important;
+}
+
+.sos-btn.general {
+  background: var(--joint-color) !important;
+  color: #ffffff !important;
+}
+
+/* Footer */
+.footer {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border-top: 1px solid var(--neu-border) !important;
+  box-shadow: inset 0 8px 18px var(--neu-shadow-dark-sm) !important;
+}

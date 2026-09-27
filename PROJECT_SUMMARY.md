@@ -29,7 +29,27 @@ A **LordTúra** egy moduláris, több hegyi expedíciót és túratervet kiszolg
 
 ---
 
-## 📱 2. Mobilbarát Képességek & Terepi Használhatóság (ÚJ FUNKCIÓK)
+## 🎨 2. Neumorphism / Soft UI Design Rendszer (Figma 2026 Trend 8 Átalakítás)
+
+A portál és az összes kapcsolódó aloldal a **Figma hivatalos 2026-os webdesign trendjei** közül a **8. Trend: Neumorphism (Soft UI)** elvei szerint lett teljes körűen áttervezve:
+
+1. **Szerves, Háttérből Kiemelkedő Felületek (Extruded Surfaces):**
+   * A felületek és kártyák anyaga azonos a háttérrel (`#e6ecf5` világos, `#181d26` sötét módban), mintha közvetlenül a síkból lennének kiöntve.
+2. **Kettős Fény-Árnyék Pár (Dual Light & Dark Shadows):**
+   * A valósághű térhatást a bal-felső lágy fényfolt és a jobb-alsó mély árnyék kombinációja adja (`box-shadow: 7px 7px 16px var(--neu-shadow-dark), -7px -7px 16px var(--neu-shadow-light)`).
+3. **Süllyesztett Mélyedések & Taktilis Gombok (Inset Wells & Concave States):**
+   * A beviteli mezők, szintrajz-műszertáblák és adatterületek elegánsan a felületbe süllyesztett vájatokként (`box-shadow: inset ...`) jelennek meg.
+   * A gombok és aktív navigációs fülek kattintáskor finoman besüllyednek a felületbe.
+4. **Lágy, Lekerekített Geometria:**
+   * Finoman ívelt sarkok (`16px - 24px`) és kapszula (`pill`) formájú gombok a prémium, organikus tapintási élményért.
+5. **Finom Alpesi Fények & Akcentusok:**
+   * Lágy, modern színkiemelések a hegyi elemekhez: Ferrata rózsa-korall (`#f43f5e`), Túrázó hegyi smaragd (`#059669`), Közös alpesi borostyán (`#d97706`) és égszínkék (`#0284c7`).
+6. **Kétirányú Neumorphic Témaváltó (Light Soft UI ☀️ ↔ Dark Charcoal Neumorphism 🌙):**
+   * Azonnali, villanásmentes (zero-FOUC) sötét/világos Neumorphic kapcsoló a navigációban és mobilfiókban, `localStorage` memóriával.
+
+---
+
+## 📱 3. Mobilbarát Képességek & Terepi Használhatóság (ÚJ FUNKCIÓK)
 
 A túrázók és mászók a hegyen gyakran okostelefonról nyitják meg az oldalt, ezért a felület prémium mobil-élménnyel lett felvértezve:
 
