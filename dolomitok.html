@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="hu" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
@@ -29,9 +29,15 @@
   <script>
     (function(){
       try {
-        var t = localStorage.getItem('lordtura_theme');
-        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-      } catch(e) {}
+        var t = localStorage.getItem('lordtura_theme_v2') || localStorage.getItem('lordtura_theme');
+        if (t === 'light') {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
     })();
   </script>
 </head>
