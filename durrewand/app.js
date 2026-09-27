@@ -240,7 +240,7 @@ function initLeafletMapAndElevation() {
     const ptCount = trackCoordinates.length;
     const polylinePopupHtml = `
       <div class="custom-popup-box">
-        <span class="custom-popup-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">
+        <span class="custom-popup-badge" style="background: rgba(4, 120, 87, 0.2); color: var(--emerald-600);">
           Dürre Wand Körtúra • 9.07 km
         </span>
         <h4>Plattenstein & Gauermannhütte Kör</h4>
@@ -249,7 +249,7 @@ function initLeafletMapAndElevation() {
           <span class="custom-popup-badge" style="background:#1e293b;color:#f1f5f9;">9.07 km</span>
           <span class="custom-popup-badge" style="background:#1e293b;color:#f1f5f9;">+656 m / -656 m</span>
           <span class="custom-popup-badge" style="background:#1e293b;color:#f1f5f9;">3.5–4.5 óra</span>
-          <span class="custom-popup-badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;">
+          <span class="custom-popup-badge" style="background:rgba(3,105,161,0.2);color:var(--accent-blue);">
             <i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont
           </span>
         </div>
@@ -322,7 +322,7 @@ function initLeafletMapAndElevation() {
 
       const popupHtml = `
         <div class="custom-popup-box">
-          <span class="custom-popup-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">
+          <span class="custom-popup-badge" style="background: rgba(4, 120, 87, 0.2); color: var(--emerald-600);">
             ${wp.badge || (wp.elevation + ' m')}
           </span>
           <h4>${wp.name}</h4>
@@ -335,7 +335,7 @@ function initLeafletMapAndElevation() {
             <span class="custom-popup-badge" style="background:#1e293b;color:#f1f5f9;">
               <i class="fa-solid fa-route"></i> ${wp.distKm} km
             </span>
-            <span class="custom-popup-badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;">
+            <span class="custom-popup-badge" style="background:rgba(3,105,161,0.2);color:var(--accent-blue);">
               <i class="fa-solid fa-satellite-dish"></i> ${wp.lat.toFixed(4)}, ${wp.lon.toFixed(4)}
             </span>
           </div>
@@ -547,6 +547,11 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
   const summitX = getX(summitDist);
   const summitY = getY(summitEle);
   
+  const isDark = (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark') || false;
+  const peakFill = isDark ? '#fbbf24' : '#854d0e';
+  const eleFill = isDark ? '#f8fafc' : '#334155';
+  const distFill = isDark ? '#94a3b8' : '#334155';
+
   // Build SVG Path
   let dPath = `M ${getX(track[0].dist)} ${getY(track[0].ele)}`;
   track.forEach(pt => {
@@ -563,7 +568,7 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
     const isPeak = lvl === 1148;
     gridSvg += `
       <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="${isPeak ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.08)'}" stroke-dasharray="${isPeak ? '3,3' : '4,4'}" stroke-width="${isPeak ? '1.5' : '1'}"/>
-      <text x="${padLeft - 10}" y="${y + 4}" fill="${isPeak ? '#fbbf24' : '#94a3b8'}" font-size="${isPeak ? '12' : '11'}" font-weight="${isPeak ? 'bold' : 'normal'}" text-anchor="end" font-family="sans-serif">${lvl === 1148 ? '1154 m' : lvl + ' m'}</text>
+      <text x="${padLeft - 10}" y="${y + 4}" fill="${isPeak ? peakFill : eleFill}" font-size="${isPeak ? '12' : '11'}" font-weight="${isPeak ? 'bold' : 'normal'}" text-anchor="end" font-family="sans-serif">${lvl === 1148 ? '1154 m' : lvl + ' m'}</text>
     `;
   });
   
@@ -574,7 +579,7 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
     const x = getX(d);
     distSvg += `
       <line x1="${x}" y1="${padTop + plotH}" x2="${x}" y2="${padTop + plotH + 6}" stroke="rgba(255,255,255,0.25)"/>
-      <text x="${x}" y="${padTop + plotH + 22}" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">${d} km</text>
+      <text x="${x}" y="${padTop + plotH + 22}" fill="${distFill}" font-size="11" text-anchor="middle" font-family="sans-serif">${d} km</text>
     `;
   });
   
@@ -757,18 +762,39 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
     updateScrubPosition(dist);
   };
   
+  let durreTouchLatchTimer = null;
+
+  function clearDurreLatch() {
+    if (durreTouchLatchTimer) {
+      clearTimeout(durreTouchLatchTimer);
+      durreTouchLatchTimer = null;
+    }
+  }
+
   function handleScrub(clientX) {
+    clearDurreLatch();
     const coords = getSvgCoordinates(clientX);
     if (!coords) return;
     updateScrubPosition(coords.curDist, coords.clampedSvgX);
   }
   
   svg.addEventListener('mousemove', (e) => handleScrub(e.clientX));
-  svg.addEventListener('touchmove', (e) => {
+
+  svg.addEventListener('touchstart', (e) => {
+    clearDurreLatch();
     if (e.touches && e.touches.length > 0) {
+      if (e.cancelable) e.preventDefault();
       handleScrub(e.touches[0].clientX);
     }
-  }, { passive: true });
+  }, { passive: false });
+
+  svg.addEventListener('touchmove', (e) => {
+    clearDurreLatch();
+    if (e.touches && e.touches.length > 0) {
+      if (e.cancelable) e.preventDefault();
+      handleScrub(e.touches[0].clientX);
+    }
+  }, { passive: false });
   
   // Click on SVG centers map on that location
   svg.addEventListener('click', (e) => {
@@ -781,13 +807,27 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
   });
   
   function hideScrub() {
+    clearDurreLatch();
     scrubLine.setAttribute('opacity', '0');
     scrubCircle.setAttribute('opacity', '0');
     if (tooltip) tooltip.classList.remove('active');
   }
   
   svg.addEventListener('mouseleave', hideScrub);
-  svg.addEventListener('touchend', hideScrub);
+
+  svg.addEventListener('touchend', () => {
+    clearDurreLatch();
+    durreTouchLatchTimer = setTimeout(() => {
+      hideScrub();
+    }, 2500);
+  });
+
+  svg.addEventListener('touchcancel', () => {
+    clearDurreLatch();
+    durreTouchLatchTimer = setTimeout(() => {
+      hideScrub();
+    }, 2500);
+  });
 }
 
 /* ==========================================================================
@@ -1104,3 +1144,57 @@ function initNavigation() {
     });
   }
 }
+
+window.copyCurrentGpsLocation = function() {
+  if (!navigator.geolocation) {
+    alert('A böngésző nem támogatja a helymeghatározást (GPS).');
+    return;
+  }
+  
+  const showGpsToast = (msg, isError = false) => {
+    let toast = document.getElementById('gps-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'gps-toast';
+      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = (isError ? '⚠️ ' : '📍 ') + msg;
+    toast.style.opacity = '1';
+    toast.style.display = 'flex';
+    setTimeout(() => {
+      if (toast) {
+        toast.style.opacity = '0';
+        setTimeout(() => { toast.style.display = 'none'; }, 300);
+      }
+    }, 4000);
+  };
+
+  showGpsToast('GPS helymeghatározás folyamatban...');
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude.toFixed(6);
+      const lon = position.coords.longitude.toFixed(6);
+      const acc = Math.round(position.coords.accuracy);
+      const alt = position.coords.altitude ? ` (${Math.round(position.coords.altitude)} m tszf)` : '';
+      const text = `${lat}, ${lon}${alt} [±${acc}m]`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showGpsToast(`Másolva a vágólapra: ${text}`);
+        }).catch(() => {
+          prompt('Másold ki a GPS koordinátákat a segélyhíváshoz:', text);
+        });
+      } else {
+        prompt('Másold ki a GPS koordinátákat a segélyhíváshoz:', text);
+      }
+    },
+    (err) => {
+      console.warn('Geolocation error:', err);
+      showGpsToast('Nem sikerült lekérni a GPS pozíciót. Engedélyezd a helymeghatározást!', true);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+};
+

@@ -184,11 +184,11 @@
   <nav class="main-nav">
     <div class="nav-container">
       <div class="nav-brand-group">
-        <a href="index.html" class="nav-home-btn" title="Vissza a LordTúra Kezdőlapra" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.8rem;background:rgba(56,189,248,0.15);color:var(--accent-blue);border:1px solid rgba(56,189,248,0.3);border-radius:var(--radius-full);text-decoration:none;font-size:0.85rem;font-weight:600;transition:var(--transition);margin-right:0.3rem;">
+        <a href="index.html" class="nav-home-btn" title="Vissza a LordTúra Kezdőlapra" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.8rem;min-height:44px;background:rgba(56,189,248,0.15);color:var(--accent-blue);border:1px solid rgba(56,189,248,0.3);border-radius:var(--radius-full);text-decoration:none;font-size:0.85rem;font-weight:600;transition:var(--transition);margin-right:0.3rem;">
           <i class="fa-solid fa-arrow-left"></i>
           <span>Kezdőlap</span>
         </a>
-        <a href="durrewand/index.html" class="nav-home-btn" title="Ugrás a Plattenstein (Dürre Wand) túrára" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.8rem;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-full);text-decoration:none;font-size:0.85rem;font-weight:600;transition:var(--transition);margin-right:0.5rem;">
+        <a href="durrewand/index.html" class="nav-home-btn" title="Ugrás a Plattenstein (Dürre Wand) túrára" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 0.8rem;background:rgba(16,185,129,0.15);color:var(--hiker-color);font-weight:700;min-height:44px;border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-full);text-decoration:none;font-size:0.85rem;transition:var(--transition);margin-right:0.5rem;">
           <i class="fa-solid fa-tree"></i>
           <span>Plattenstein</span>
         </a>
@@ -232,7 +232,7 @@
         <button class="nav-tab" data-section="logistics-section">
           <i class="fa-solid fa-square-parking"></i> Logisztika &amp; Parkolás
         </button>
-        <button id="themeToggleBtn" class="neo-theme-toggle" aria-label="Neo-Brutalist Téma Váltó">
+        <button id="themeToggleBtn" class="neo-theme-toggle" aria-label="Neumorphic Soft UI Téma Váltó">
           <i class="fa-solid fa-circle-half-stroke"></i> <span>MÓD</span>
         </button>
       </div>
@@ -256,7 +256,7 @@
     </div>
 
     <div class="drawer-body">
-      <button id="themeToggleBtnMobile" class="neo-theme-toggle" style="width:100%;margin-bottom:1rem;justify-content:center;" aria-label="Neo-Brutalist Téma Váltó">
+      <button id="themeToggleBtnMobile" class="neo-theme-toggle" style="width:100%;margin-bottom:1rem;justify-content:center;" aria-label="Neumorphic Soft UI Téma Váltó">
         <i class="fa-solid fa-circle-half-stroke"></i> <span>TÉMA VÁLTÁS</span>
       </button>
       <div class="drawer-section-title">Navigáció</div>
@@ -265,7 +265,7 @@
           <i class="fa-solid fa-arrow-left"></i>
           <span>← Vissza a Kezdőlapra</span>
         </a>
-        <a href="durrewand/index.html" class="drawer-nav-item" style="color:#34d399;font-weight:600;text-decoration:none;">
+        <a href="durrewand/index.html" class="drawer-nav-item" style="color:var(--hiker-color);font-weight:600;text-decoration:none;">
           <i class="fa-solid fa-tree"></i>
           <span>🌲 Dürre Wand &amp; Plattenstein (1154 m)</span>
         </a>
@@ -339,6 +339,9 @@
             <span>Általános vészhelyzeti szám</span>
           </div>
         </a>
+        <button type="button" class="btn-card-secondary" onclick="copyCurrentGpsLocation()" style="min-height: 44px; width: 100%; margin-top: 0.5rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 700; border-radius: var(--radius-md);">
+          <i class="fa-solid fa-location-crosshairs"></i><span>GPS Koordináták Másolása Mentéshez</span>
+        </button>
       </div>
 
       <div class="drawer-info-box">

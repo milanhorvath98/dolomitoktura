@@ -641,6 +641,36 @@
       box-shadow: var(--shadow-inset-sm);
     }
 
+    .btn-open-tour {
+      min-height: 44px;
+      padding: 0.75rem 1.4rem;
+      background: var(--bg-surface);
+      color: var(--accent-blue);
+      border: 1px solid var(--neu-border);
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .btn-open-tour:hover {
+      box-shadow: 6px 6px 14px var(--neu-shadow-dark), -6px -6px 14px var(--neu-shadow-light);
+      color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .btn-open-tour:active {
+      box-shadow: var(--shadow-inset-sm);
+      transform: translateY(0);
+    }
+
     /* Funkciók & Eszköztár Szekció */
     .portal-features {
       background: var(--bg-card);
@@ -764,7 +794,21 @@
 
     @media (max-width: 768px) {
       .portal-nav-links {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .portal-nav-link {
         display: none;
+      }
+      .portal-cta-btn {
+        min-height: 44px;
+        padding: 0.5rem 0.85rem;
+        font-size: 0.8rem;
+      }
+      .neo-theme-toggle {
+        min-height: 44px;
+        min-width: 44px;
       }
       .portal-stats-grid {
         grid-template-columns: 1fr;
@@ -802,13 +846,13 @@
         <a href="#expeditions" class="portal-nav-link">
           <i class="fa-solid fa-route"></i> Túrák
         </a>
-        <a href="durrewand/index.html" class="portal-nav-link" style="color:#34d399;font-weight:600;">
+        <a href="durrewand/index.html" class="portal-nav-link" style="color:var(--hiker-color);font-weight:700;">
           <i class="fa-solid fa-tree"></i> Plattenstein
         </a>
         <a href="dolomitok.html" class="portal-cta-btn">
           <i class="fa-solid fa-mountain"></i> Dolomitok 4D <i class="fa-solid fa-arrow-right"></i>
         </a>
-        <button id="themeToggleBtn" class="neo-theme-toggle" aria-label="Neo-Brutalist Téma Váltó">
+        <button id="themeToggleBtn" class="neo-theme-toggle" aria-label="Neumorphic Soft UI Téma Váltó">
           <i class="fa-solid fa-circle-half-stroke"></i> <span>MÓD</span>
         </button>
       </div>
@@ -846,7 +890,7 @@
           <span>Dolomitok 4D</span>
           <i class="fa-solid fa-arrow-right"></i>
         </a>
-        <a href="durrewand/index.html" class="btn-portal-primary" style="background:linear-gradient(135deg, #059669, #10b981);box-shadow:0 6px 24px rgba(16,185,129,0.45);">
+        <a href="durrewand/index.html" class="btn-portal-primary" style="background:linear-gradient(135deg, #047857, #065f46);color:#ffffff !important;box-shadow:0 6px 24px rgba(4,120,87,0.45);border-color:transparent;">
           <i class="fa-solid fa-tree"></i>
           <span>Plattenstein (1154 m)</span>
           <i class="fa-solid fa-arrow-right"></i>

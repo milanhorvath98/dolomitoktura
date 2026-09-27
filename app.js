@@ -630,14 +630,14 @@ function drawAllRoutes() {
       const ptCount = day.climberProgram.routeCoordinates.length;
       const popupHtml = `
         <div class="custom-popup-box">
-          <span class="custom-popup-badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">${day.dayNumber}. Nap • Mászó Csapat</span>
+          <span class="custom-popup-badge" style="background: rgba(190, 18, 60, 0.2); color: var(--climber-color);">${day.dayNumber}. Nap • Mászó Csapat</span>
           <h4>${day.climberProgram.name}</h4>
           <p><strong>Cél:</strong> ${day.climberProgram.target}</p>
           <div class="custom-popup-badges">
             <span class="custom-popup-badge" style="background:#334155;color:#fff;">Nehézség: ${day.climberProgram.difficulty}</span>
             <span class="custom-popup-badge" style="background:#334155;color:#fff;">${day.climberProgram.duration}</span>
             <span class="custom-popup-badge" style="background:#334155;color:#fff;">${day.climberProgram.ascent}</span>
-            <span class="custom-popup-badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;"><i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont</span>
+            <span class="custom-popup-badge" style="background:rgba(3,105,161,0.2);color:var(--accent-blue);"><i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont</span>
           </div>
           <div style="margin-top:0.6rem;display:flex;gap:4px;">
             <button class="custom-popup-btn" onclick="openTourModal('${day.climberProgram.id}')">Részletek &rarr;</button>
@@ -680,14 +680,14 @@ function drawAllRoutes() {
       const ptCount = day.hikerProgram.routeCoordinates.length;
       const popupHtml = `
         <div class="custom-popup-box">
-          <span class="custom-popup-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">${day.dayNumber}. Nap • Túrázó Csapat</span>
+          <span class="custom-popup-badge" style="background: rgba(4, 120, 87, 0.2); color: var(--hiker-color);">${day.dayNumber}. Nap • Túrázó Csapat</span>
           <h4>${day.hikerProgram.name}</h4>
           <p><strong>Cél:</strong> ${day.hikerProgram.target}</p>
           <div class="custom-popup-badges">
             <span class="custom-popup-badge" style="background:#334155;color:#fff;">${day.hikerProgram.distance}</span>
             <span class="custom-popup-badge" style="background:#334155;color:#fff;">${day.hikerProgram.duration}</span>
             <span class="custom-popup-badge" style="background:#334155;color:#fff;">${day.hikerProgram.ascent}</span>
-            <span class="custom-popup-badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;"><i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont</span>
+            <span class="custom-popup-badge" style="background:rgba(3,105,161,0.2);color:var(--accent-blue);"><i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont</span>
           </div>
           <div style="margin-top:0.6rem;display:flex;gap:4px;">
             <button class="custom-popup-btn" onclick="openTourModal('${day.hikerProgram.id}')">Részletek &rarr;</button>
@@ -729,12 +729,12 @@ function drawAllRoutes() {
       const ptCount = day.jointProgram.routeCoordinates.length;
       const popupHtml = `
         <div class="custom-popup-box">
-          <span class="custom-popup-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">${day.dayNumber}. Nap • Közös Program</span>
+          <span class="custom-popup-badge" style="background: rgba(217, 119, 6, 0.2); color: var(--joint-color);">${day.dayNumber}. Nap • Közös Program</span>
           <h4>${day.jointProgram.name}</h4>
           <p><strong>Helyszín:</strong> ${day.jointProgram.target}</p>
           <p><strong>Időpont:</strong> ${day.jointProgram.time}</p>
           <div class="custom-popup-badges">
-            <span class="custom-popup-badge" style="background:rgba(56,189,248,0.2);color:#38bdf8;"><i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont</span>
+            <span class="custom-popup-badge" style="background:rgba(3,105,161,0.2);color:var(--accent-blue);"><i class="fa-solid fa-satellite-dish"></i> ${ptCount} GPS pont</span>
           </div>
           <div style="margin-top:0.6rem;display:flex;gap:4px;">
             <button class="custom-popup-btn" style="background:#10b981;color:#fff;" onclick="downloadGPX('${day.jointProgram.id}')">
@@ -932,7 +932,14 @@ function clearElevationMapHighlight() {
   }
 }
 
+let elevationTouchLatchTimers = {};
+
 window.handleElevationHover = function(event, containerId) {
+  if (elevationTouchLatchTimers[containerId]) {
+    clearTimeout(elevationTouchLatchTimers[containerId]);
+    delete elevationTouchLatchTimers[containerId];
+  }
+
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -981,6 +988,11 @@ window.handleElevationHover = function(event, containerId) {
 };
 
 window.handleElevationLeave = function(containerId) {
+  if (elevationTouchLatchTimers[containerId]) {
+    clearTimeout(elevationTouchLatchTimers[containerId]);
+    delete elevationTouchLatchTimers[containerId];
+  }
+
   const scrubLine = document.getElementById(`${containerId}-scrub-line`);
   const scrubDot = document.getElementById(`${containerId}-scrub-dot`);
   const tip = document.getElementById(`${containerId}-tip`);
@@ -993,10 +1005,80 @@ window.handleElevationLeave = function(containerId) {
 };
 
 window.handleElevationTouch = function(event, containerId) {
+  if (event.cancelable) {
+    event.preventDefault();
+  }
+  if (elevationTouchLatchTimers[containerId]) {
+    clearTimeout(elevationTouchLatchTimers[containerId]);
+    delete elevationTouchLatchTimers[containerId];
+  }
   if (event.touches && event.touches.length > 0) {
     const touch = event.touches[0];
     handleElevationHover({ clientX: touch.clientX, clientY: touch.clientY }, containerId);
   }
+};
+
+window.handleElevationTouchEnd = function(containerId) {
+  if (elevationTouchLatchTimers[containerId]) {
+    clearTimeout(elevationTouchLatchTimers[containerId]);
+  }
+  elevationTouchLatchTimers[containerId] = setTimeout(() => {
+    handleElevationLeave(containerId);
+    delete elevationTouchLatchTimers[containerId];
+  }, 2500);
+};
+
+window.copyCurrentGpsLocation = function() {
+  if (!navigator.geolocation) {
+    alert('A böngésző nem támogatja a helymeghatározást (GPS).');
+    return;
+  }
+  
+  const showGpsToast = (msg, isError = false) => {
+    let toast = document.getElementById('gps-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'gps-toast';
+      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = (isError ? '⚠️ ' : '📍 ') + msg;
+    toast.style.opacity = '1';
+    toast.style.display = 'flex';
+    setTimeout(() => {
+      if (toast) {
+        toast.style.opacity = '0';
+        setTimeout(() => { toast.style.display = 'none'; }, 300);
+      }
+    }, 4000);
+  };
+
+  showGpsToast('GPS helymeghatározás folyamatban...');
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude.toFixed(6);
+      const lon = position.coords.longitude.toFixed(6);
+      const acc = Math.round(position.coords.accuracy);
+      const alt = position.coords.altitude ? ` (${Math.round(position.coords.altitude)} m tszf)` : '';
+      const text = `${lat}, ${lon}${alt} [±${acc}m]`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showGpsToast(`Másolva a vágólapra: ${text}`);
+        }).catch(() => {
+          prompt('Másold ki a GPS koordinátákat a segélyhíváshoz:', text);
+        });
+      } else {
+        prompt('Másold ki a GPS koordinátákat a segélyhíváshoz:', text);
+      }
+    },
+    (err) => {
+      console.warn('Geolocation error:', err);
+      showGpsToast('Nem sikerült lekérni a GPS pozíciót. Engedélyezd a helymeghatározást!', true);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
 };
 
 function renderElevationProfileSvg(tourId, options = {}) {
@@ -1049,6 +1131,10 @@ function renderElevationProfileSvg(tourId, options = {}) {
   let highest = coords[0];
   coords.forEach(c => { if (c.ele > highest.ele) highest = c; });
 
+  const isDark = (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark') || false;
+  const eleTextFill = isDark ? '#f8fafc' : '#334155';
+  const axisTextFill = isDark ? '#94a3b8' : '#334155';
+
   const containerId = `elev-chart-${tourId.replace(/[^a-zA-Z0-9]/g, '_')}-${Math.random().toString(36).substr(2, 5)}`;
   const ptsJson = JSON.stringify(coords.map(c => [c.x, c.y, c.km, c.ele, c.lat, c.lon])).replace(/"/g, '&quot;');
 
@@ -1072,19 +1158,19 @@ function renderElevationProfileSvg(tourId, options = {}) {
         </defs>
 
         <line x1="${padLeft}" y1="${maxY}" x2="${width - padRight}" y2="${maxY}" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3,3" />
-        <text x="${padLeft - 4}" y="${maxY + 3}" fill="#94a3b8" font-size="${compact ? 8 : 9}" text-anchor="end" font-family="sans-serif">${Math.round(maxEle)}m</text>
+        <text x="${padLeft - 4}" y="${maxY + 3}" fill="${eleTextFill}" font-size="${compact ? 8 : 9}" text-anchor="end" font-family="sans-serif">${Math.round(maxEle)}m</text>
 
         ${!compact ? `
           <line x1="${padLeft}" y1="${midY}" x2="${width - padRight}" y2="${midY}" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2,2" />
-          <text x="${padLeft - 4}" y="${midY + 3}" fill="#64748b" font-size="8.5" text-anchor="end" font-family="sans-serif">${midEle}m</text>
+          <text x="${padLeft - 4}" y="${midY + 3}" fill="${axisTextFill}" font-size="8.5" text-anchor="end" font-family="sans-serif">${midEle}m</text>
         ` : ''}
 
         <line x1="${padLeft}" y1="${minY}" x2="${width - padRight}" y2="${minY}" stroke="rgba(255,255,255,0.12)" />
-        <text x="${padLeft - 4}" y="${minY + 3}" fill="#94a3b8" font-size="${compact ? 8 : 9}" text-anchor="end" font-family="sans-serif">${Math.round(minEle)}m</text>
+        <text x="${padLeft - 4}" y="${minY + 3}" fill="${eleTextFill}" font-size="${compact ? 8 : 9}" text-anchor="end" font-family="sans-serif">${Math.round(minEle)}m</text>
 
-        <text x="${padLeft}" y="${height - (compact ? 3 : 6)}" fill="#64748b" font-size="${compact ? 7.5 : 8.5}" font-family="sans-serif">0 km</text>
-        <text x="${padLeft + chartW / 2}" y="${height - (compact ? 3 : 6)}" fill="#64748b" font-size="${compact ? 7.5 : 8.5}" text-anchor="middle" font-family="sans-serif">${(totalKm / 2).toFixed(1)} km</text>
-        <text x="${width - padRight}" y="${height - (compact ? 3 : 6)}" fill="#64748b" font-size="${compact ? 7.5 : 8.5}" text-anchor="end" font-family="sans-serif">${totalKm} km</text>
+        <text x="${padLeft}" y="${height - (compact ? 3 : 6)}" fill="${axisTextFill}" font-size="${compact ? 7.5 : 8.5}" font-family="sans-serif">0 km</text>
+        <text x="${padLeft + chartW / 2}" y="${height - (compact ? 3 : 6)}" fill="${axisTextFill}" font-size="${compact ? 7.5 : 8.5}" text-anchor="middle" font-family="sans-serif">${(totalKm / 2).toFixed(1)} km</text>
+        <text x="${width - padRight}" y="${height - (compact ? 3 : 6)}" fill="${axisTextFill}" font-size="${compact ? 7.5 : 8.5}" text-anchor="end" font-family="sans-serif">${totalKm} km</text>
 
         <path d="${areaD}" fill="url(#${gradId})" />
         <path d="${lineD}" fill="none" stroke="${color}" stroke-width="${compact ? 1.8 : 2.2}" stroke-linecap="round" stroke-linejoin="round" />
@@ -1094,11 +1180,13 @@ function renderElevationProfileSvg(tourId, options = {}) {
         <line id="${containerId}-scrub-line" x1="0" y1="${padTop}" x2="0" y2="${minY}" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="2,2" style="display:none;" />
         <circle id="${containerId}-scrub-dot" cx="0" cy="0" r="4.5" fill="#ffffff" stroke="${color}" stroke-width="2.5" style="display:none;" />
 
-        <rect x="${padLeft}" y="${padTop}" width="${chartW}" height="${chartH}" fill="transparent" style="cursor:crosshair;" 
+        <rect x="${padLeft}" y="${padTop}" width="${chartW}" height="${chartH}" fill="transparent" style="cursor:crosshair; touch-action:none;" 
               onmousemove="handleElevationHover(event, '${containerId}')"
               onmouseleave="handleElevationLeave('${containerId}')"
+              ontouchstart="handleElevationTouch(event, '${containerId}')"
               ontouchmove="handleElevationTouch(event, '${containerId}')"
-              ontouchend="handleElevationLeave('${containerId}')" />
+              ontouchend="handleElevationTouchEnd('${containerId}')"
+              ontouchcancel="handleElevationTouchEnd('${containerId}')" />
       </svg>
     </div>
   `;
@@ -1217,7 +1305,7 @@ function renderDaysAndTours() {
             <div class="tour-specs-grid">
               <div class="spec-item">
                 <span class="spec-label">Nehézség</span>
-                <span class="spec-value" style="color:#ef4444;">${day.climberProgram.difficulty.split(' ')[0]}</span>
+                <span class="spec-value" style="color:var(--climber-color);">${day.climberProgram.difficulty.split(' ')[0]}</span>
               </div>
               <div class="spec-item">
                 <span class="spec-label">Szintkülönbség</span>
@@ -1225,7 +1313,7 @@ function renderDaysAndTours() {
               </div>
               <div class="spec-item">
                 <span class="spec-label">GPS Pontok</span>
-                <span class="spec-value" style="color:#38bdf8;">${climberPoints} pont</span>
+                <span class="spec-value" style="color:var(--accent-blue);">${climberPoints} pont</span>
               </div>
             </div>
 
@@ -1294,7 +1382,7 @@ function renderDaysAndTours() {
               </div>
               <div class="spec-item">
                 <span class="spec-label">GPS Pontok</span>
-                <span class="spec-value" style="color:#38bdf8;">${hikerPoints} pont</span>
+                <span class="spec-value" style="color:var(--accent-blue);">${hikerPoints} pont</span>
               </div>
             </div>
 
@@ -1347,8 +1435,8 @@ function renderDaysAndTours() {
           <div class="joint-info" style="flex:1;">
             <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.2rem;flex-wrap:wrap;">
               <span class="badge badge-joint">Közös Délután</span>
-              <span style="font-size:0.8rem;color:#fcd34d;font-weight:600;"><i class="fa-regular fa-clock"></i> ${day.jointProgram.time}</span>
-              <span class="badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;font-size:0.75rem;"><i class="fa-solid fa-satellite-dish"></i> ${jointPoints} GPS pont</span>
+              <span style="font-size:0.8rem;color:var(--joint-color);font-weight:600;"><i class="fa-regular fa-clock"></i> ${day.jointProgram.time}</span>
+              <span class="badge" style="background:rgba(3,105,161,0.15);color:var(--accent-blue);font-size:0.75rem;"><i class="fa-solid fa-satellite-dish"></i> ${jointPoints} GPS pont</span>
             </div>
             <h5>${day.jointProgram.name} &bull; ${day.jointProgram.target}</h5>
             <p>${day.jointProgram.description}</p>
@@ -1364,10 +1452,10 @@ function renderDaysAndTours() {
           </div>
         </div>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-self:flex-start;margin-top:0.5rem;">
-          <button class="btn-sm" style="background:var(--joint-bg);color:#fbbf24;border-color:rgba(245,158,11,0.4);" onclick="focusOnMap('${day.jointProgram.id}')">
+          <button class="btn-sm" style="background:var(--joint-bg);color:var(--joint-color);border-color:rgba(245,158,11,0.4);min-height:44px;" onclick="focusOnMap('${day.jointProgram.id}')">
             <i class="fa-solid fa-location-dot"></i> Térképre
           </button>
-          <button class="btn-sm" style="background:rgba(16,185,129,0.2);color:#34d399;border-color:rgba(16,185,129,0.4);" onclick="downloadGPX('${day.jointProgram.id}')">
+          <button class="btn-sm" style="background:rgba(16,185,129,0.2);color:var(--hiker-color);border-color:rgba(16,185,129,0.4);min-height:44px;" onclick="downloadGPX('${day.jointProgram.id}')">
             <i class="fa-solid fa-download"></i> GPX
           </button>
         </div>
@@ -1695,12 +1783,12 @@ window.openTourModal = function(tourId) {
     </div>
 
     <div class="modal-specs-bar">
-      ${tour.difficulty ? `<div><span class="spec-label">Nehézség</span><strong style="color:#ef4444;">${tour.difficulty}</strong></div>` : ''}
+      ${tour.difficulty ? `<div><span class="spec-label">Nehézség</span><strong style="color:var(--climber-color);">${tour.difficulty}</strong></div>` : ''}
       ${tour.duration ? `<div><span class="spec-label">Időtartam</span><strong>${tour.duration}</strong></div>` : ''}
       ${tour.distance ? `<div><span class="spec-label">Távolság</span><strong>${tour.distance}</strong></div>` : ''}
       ${tour.ascent ? `<div><span class="spec-label">Szintemelkedés</span><strong>${tour.ascent}</strong></div>` : ''}
       ${tour.maxAltitude ? `<div><span class="spec-label">Legmagasabb pont</span><strong>${tour.maxAltitude}</strong></div>` : ''}
-      <div><span class="spec-label">Valós GPS Pont</span><strong style="color:#38bdf8;">${tour.routeCoordinates ? tour.routeCoordinates.length : 0} pont</strong></div>
+      <div><span class="spec-label">Valós GPS Pont</span><strong style="color:var(--accent-blue);">${tour.routeCoordinates ? tour.routeCoordinates.length : 0} pont</strong></div>
     </div>
 
     <!-- Interaktív Részletes Szintrajz -->
