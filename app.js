@@ -1332,7 +1332,7 @@ function renderDaysAndTours() {
               </div>
             </div>
 
-            <!-- Valós Geodéziai Szintrajz -->
+            <!-- Szintrajz -->
             ${createElevationProfileHtml(day.climberProgram.id)}
 
             ${day.climberProgram.parking ? `
@@ -1401,7 +1401,7 @@ function renderDaysAndTours() {
               </div>
             </div>
 
-            <!-- Valós Geodéziai Szintrajz -->
+            <!-- Szintrajz -->
             ${createElevationProfileHtml(day.hikerProgram.id)}
 
             ${day.hikerProgram.parking ? `
