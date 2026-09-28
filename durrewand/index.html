@@ -209,6 +209,9 @@
         <a href="plattenstein.gpx" download="durrewand_plattenstein.gpx" class="btn btn-amber">
           <i class="fa-solid fa-file-arrow-down"></i> GPX Letöltése
         </a>
+        <button type="button" class="btn-tour-complete btn-tour-complete-durrewand" onclick="toggleDurrewandComplete()" aria-pressed="false">
+          <i class="fa-regular fa-circle-check"></i> <span>Megvolt</span>
+        </button>
       </div>
     </div>
   </header>
@@ -219,7 +222,10 @@
          ========================================================================== -->
     <section class="section" id="terkep">
       <div class="section-header">
-        <span class="section-badge"><i class="fa-solid fa-map-pin"></i> Útvonal & Domborzat</span>
+        <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+          <span class="section-badge" style="margin-bottom:0;"><i class="fa-solid fa-map-pin"></i> Útvonal & Domborzat</span>
+          <span class="tour-done-pill durrewand-status-pill" style="display:none;"><i class="fa-solid fa-check"></i> Megvolt</span>
+        </div>
         <h2 class="section-title">Interaktív Túratérkép & GPS Nyomvonal</h2>
         <p class="section-subtitle">
           9.1 km-es körtúra Miesenbach (Frohnberg) faluból a Wurzelsteig gerincén át a Plattenstein csúcsra (1154 m), majd az Ochsenweg és a Schwaighofer-tanya érintésével vissza.

@@ -1051,6 +1051,7 @@
             <span class="meta-chip"><i class="fa-solid fa-campground"></i> Cortina Bázis</span>
             <span class="meta-chip"><i class="fa-solid fa-calendar-days"></i> 4 Napos</span>
             <span class="meta-chip"><i class="fa-solid fa-users"></i> 10 Fő (4 Mászó &bull; 6 Túrázó)</span>
+            <span class="meta-chip meta-chip-progress" id="portalDolomitesProgressChip"><i class="fa-solid fa-award"></i> <span id="portalDolomitesProgressText">0 / 12 megvolt</span></span>
           </div>
 
           <h3 class="expedition-title">🏔️ Dolomitok Expedíció: 4 Napos Kalandterv</h3>
@@ -1100,6 +1101,7 @@
             <span class="meta-chip"><i class="fa-solid fa-calendar-day"></i> 1 Napos Körtúra</span>
             <span class="meta-chip"><i class="fa-solid fa-person-walking"></i> 9.1 km &bull; +656 m</span>
             <span class="meta-chip"><i class="fa-solid fa-hotel"></i> Gauermannhütte 1154 m</span>
+            <span class="meta-chip meta-chip-progress" id="portalDurrewandProgressChip"><i class="fa-solid fa-award"></i> <span id="portalDurrewandProgressText">0 / 1 megvolt</span></span>
           </div>
 
           <h3 class="expedition-title">🌲 Dürre Wand &amp; Plattenstein (1154 m)</h3>
@@ -1329,5 +1331,44 @@
   </footer>
 
   <script src="theme.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Dolomitok haladás frissítés
+      try {
+        const rawDolomites = localStorage.getItem('lordtura_completed_tours');
+        const dArr = rawDolomites ? JSON.parse(rawDolomites) : [];
+        const validDolomiteTourIds = [
+          'day1_climber', 'day1_hiker', 'day1_joint',
+          'day2_climber', 'day2_hiker', 'day2_joint',
+          'day3_climber', 'day3_hiker', 'day3_joint',
+          'day4_climber', 'day4_hiker', 'day4_joint'
+        ];
+        const dCount = Array.isArray(dArr) ? dArr.filter(id => validDolomiteTourIds.includes(id)).length : 0;
+        const dChipText = document.getElementById('portalDolomitesProgressText');
+        const dChip = document.getElementById('portalDolomitesProgressChip');
+        if (dChipText) {
+          dChipText.textContent = `${dCount} / 12 megvolt`;
+        }
+        if (dCount > 0 && dChip) {
+          dChip.style.background = 'rgba(16, 185, 129, 0.2)';
+          dChip.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+        }
+      } catch (e) {}
+
+      // 2. Dürre Wand haladás frissítés
+      try {
+        const durreDone = localStorage.getItem('durrewand_plattenstein_completed') === 'true';
+        const wChipText = document.getElementById('portalDurrewandProgressText');
+        const wChip = document.getElementById('portalDurrewandProgressChip');
+        if (wChipText) {
+          wChipText.textContent = durreDone ? 'Teljesítve (1/1)' : '0 / 1 megvolt';
+        }
+        if (durreDone && wChip) {
+          wChip.style.background = 'rgba(16, 185, 129, 0.2)';
+          wChip.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+        }
+      } catch (e) {}
+    });
+  </script>
 </body>
 </html>

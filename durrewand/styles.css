@@ -2369,3 +2369,70 @@ textarea:focus-visible {
   border-top: 1px solid var(--neu-border) !important;
   box-shadow: inset 0 8px 18px var(--neu-shadow-dark-sm) !important;
 }
+
+/* ==========================================================================
+   TÚRA TELJESÍTVE / MEGVOLT RENDSZER (TOUR COMPLETION SYSTEM)
+   ========================================================================== */
+.btn-tour-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--neu-border);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.btn-tour-complete:hover {
+  color: var(--emerald-500);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-tour-complete:active {
+  box-shadow: var(--shadow-inset-sm);
+}
+
+.btn-tour-complete.completed {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #047857 !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  box-shadow: var(--shadow-inset-sm) !important;
+}
+
+[data-theme="dark"] .btn-tour-complete.completed {
+  background: rgba(52, 211, 153, 0.18) !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.5) !important;
+}
+
+.tour-done-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+[data-theme="dark"] .tour-done-pill {
+  background: rgba(52, 211, 153, 0.2);
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.5);
+}

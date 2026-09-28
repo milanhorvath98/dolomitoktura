@@ -421,6 +421,27 @@
         <p>A két csapat párhuzamos útvonalai, szintrajzai (interaktív magasságprofilok térkép-szinkronnal), technikai adatai és délutáni találkozási pontjai.</p>
       </div>
 
+      <!-- Expedíció Teljesítési Követő -->
+      <div class="expedition-tracker-card" id="expeditionTrackerCard">
+        <div class="tracker-header">
+          <div class="tracker-title-box">
+            <i class="fa-solid fa-award tracker-trophy"></i>
+            <div>
+              <h4>Túra Teljesítési Állapot</h4>
+              <p><span id="trackerCountText">0 / 12</span> túra megvolt</p>
+            </div>
+          </div>
+          <div class="tracker-percent-badge" id="trackerPercentBadge">0%</div>
+        </div>
+        <div class="tracker-bar-track">
+          <div class="tracker-bar-fill" id="trackerBarFill" style="width: 0%;"></div>
+        </div>
+        <div class="tracker-celebration" id="trackerCelebration" style="display:none;">
+          <i class="fa-solid fa-champagne-glasses" style="color:var(--accent-gold);font-size:1.2rem;"></i>
+          <span><strong>Gratulálunk!</strong> Az összes túrát sikeresen teljesítettétek a Dolomitokban!</span>
+        </div>
+      </div>
+
       <!-- Dinamikus Napi Kártyák Konténer -->
       <div id="days-cards-container">
         <!-- Javascript fogja legenerálni a 4 napot -->

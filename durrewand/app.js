@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveWeather();
   initNavigation();
   initFloatingMapButton();
+  initDurrewandCompletion();
 });
 
 /* ==========================================================================
@@ -1212,4 +1213,78 @@ window.copyCurrentGpsLocation = function() {
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
   );
 };
+
+/* ==========================================================================
+   Túra Teljesítve / Megvolt Rendszer (Dürre Wand)
+   ========================================================================== */
+function initDurrewandCompletion() {
+  updateDurrewandCompleteUI();
+}
+
+function getDurrewandCompleted() {
+  try {
+    return localStorage.getItem('durrewand_plattenstein_completed') === 'true';
+  } catch (e) {
+    return false;
+  }
+}
+
+window.toggleDurrewandComplete = function() {
+  const current = getDurrewandCompleted();
+  const next = !current;
+  try {
+    localStorage.setItem('durrewand_plattenstein_completed', next ? 'true' : 'false');
+  } catch (e) {
+    console.warn('Hiba a Dürre Wand teljesítés mentésekor:', e);
+  }
+  updateDurrewandCompleteUI();
+
+  showDurrewandToast(
+    next ? '🎉 Dürre Wand & Plattenstein túra teljesítve! Gratulálunk!' : '↩️ Teljesítés visszavonva.',
+    next ? 'fa-circle-check' : 'fa-rotate-left'
+  );
+};
+
+function updateDurrewandCompleteUI() {
+  const isDone = getDurrewandCompleted();
+  const btns = document.querySelectorAll('.btn-tour-complete-durrewand');
+  btns.forEach(btn => {
+    if (isDone) {
+      btn.classList.add('completed');
+      btn.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--emerald-500,#10b981);"></i> <span>Megvolt (Teljesítve)</span>`;
+      btn.setAttribute('aria-pressed', 'true');
+      btn.title = 'Kattints a megjelölés visszavonásához';
+    } else {
+      btn.classList.remove('completed');
+      btn.innerHTML = `<i class="fa-regular fa-circle-check"></i> <span>Megvolt</span>`;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.title = 'Kattints a túra teljesítettként való megjelöléséhez (Megvolt)';
+    }
+  });
+
+  const pills = document.querySelectorAll('.durrewand-status-pill');
+  pills.forEach(pill => {
+    pill.style.display = isDone ? 'inline-flex' : 'none';
+  });
+}
+
+function showDurrewandToast(msg, icon = 'fa-circle-check') {
+  let toast = document.getElementById('gps-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'gps-toast';
+    toast.style.cssText = 'position:fixed;bottom:calc(64px + env(safe-area-inset-bottom, 0px) + 20px);left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid ${icon}" style="color:var(--emerald-500,#10b981);"></i> ${msg}`;
+  toast.style.opacity = '1';
+  toast.style.display = 'flex';
+  if (toast._timeout) clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    if (toast) {
+      toast.style.opacity = '0';
+      setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }
+  }, 3500);
+}
 

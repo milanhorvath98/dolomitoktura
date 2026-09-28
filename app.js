@@ -1303,13 +1303,16 @@ function renderDaysAndTours() {
 
       <div class="teams-split-grid">
         <!-- Mászó Csapat Kártya -->
-        <div class="tour-card climber">
+        <div class="tour-card climber" data-tour-card-id="${day.climberProgram.id}">
           <div>
             <div class="tour-card-header">
-              <div>
-                <span class="badge badge-climber" style="margin-bottom:0.35rem;">
-                  <i class="fa-solid fa-person-hiking"></i> Mászó Csapat (4 fő)
-                </span>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;flex-wrap:wrap;">
+                  <span class="badge badge-climber" style="margin-bottom:0.35rem;">
+                    <i class="fa-solid fa-person-hiking"></i> Mászó Csapat (4 fő)
+                  </span>
+                  <div id="status-pill-container-${day.climberProgram.id}"></div>
+                </div>
                 <h4>${day.climberProgram.name}</h4>
                 <div class="tour-target">
                   <i class="fa-solid fa-mountain"></i> ${day.climberProgram.target}
@@ -1368,17 +1371,23 @@ function renderDaysAndTours() {
             <button class="btn-sm" onclick="downloadGPX('${day.climberProgram.id}')" title="Valós GPX letöltése">
               <i class="fa-solid fa-download"></i> GPX Letöltés
             </button>
+            <button class="btn-tour-complete" data-tour-id="${day.climberProgram.id}" onclick="toggleTourCompleted('${day.climberProgram.id}', event)">
+              <i class="fa-regular fa-circle-check"></i> <span>Megvolt</span>
+            </button>
           </div>
         </div>
 
         <!-- Túrázó Csapat Kártya -->
-        <div class="tour-card hiker">
+        <div class="tour-card hiker" data-tour-card-id="${day.hikerProgram.id}">
           <div>
             <div class="tour-card-header">
-              <div>
-                <span class="badge badge-hiker" style="margin-bottom:0.35rem;">
-                  <i class="fa-solid fa-shoe-prints"></i> Túrázó Csapat (6 fő)
-                </span>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;flex-wrap:wrap;">
+                  <span class="badge badge-hiker" style="margin-bottom:0.35rem;">
+                    <i class="fa-solid fa-shoe-prints"></i> Túrázó Csapat (6 fő)
+                  </span>
+                  <div id="status-pill-container-${day.hikerProgram.id}"></div>
+                </div>
                 <h4>${day.hikerProgram.name}</h4>
                 <div class="tour-target">
                   <i class="fa-solid fa-mountain-sun"></i> ${day.hikerProgram.target}
@@ -1437,12 +1446,15 @@ function renderDaysAndTours() {
             <button class="btn-sm" onclick="downloadGPX('${day.hikerProgram.id}')" title="Valós GPX letöltése">
               <i class="fa-solid fa-download"></i> GPX Letöltés
             </button>
+            <button class="btn-tour-complete" data-tour-id="${day.hikerProgram.id}" onclick="toggleTourCompleted('${day.hikerProgram.id}', event)">
+              <i class="fa-regular fa-circle-check"></i> <span>Megvolt</span>
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Közös Délutáni Program Sáv -->
-      <div class="joint-program-card">
+      <div class="joint-program-card" data-tour-card-id="${day.jointProgram.id}">
         <div class="joint-left" style="flex:1 1 500px;">
           <div class="joint-icon">
             <i class="fa-solid fa-champagne-glasses"></i>
@@ -1452,6 +1464,7 @@ function renderDaysAndTours() {
               <span class="badge badge-joint">Közös Délután</span>
               <span style="font-size:0.8rem;color:var(--joint-color);font-weight:600;"><i class="fa-regular fa-clock"></i> ${day.jointProgram.time}</span>
               <span class="badge" style="background:rgba(3,105,161,0.15);color:var(--accent-blue);font-size:0.75rem;"><i class="fa-solid fa-satellite-dish"></i> ${jointPoints} GPS pont</span>
+              <div id="status-pill-container-${day.jointProgram.id}" style="display:inline-flex;"></div>
             </div>
             <h5>${day.jointProgram.name} &bull; ${day.jointProgram.target}</h5>
             <p>${day.jointProgram.description}</p>
@@ -1473,12 +1486,183 @@ function renderDaysAndTours() {
           <button class="btn-sm" style="background:rgba(16,185,129,0.2);color:var(--hiker-color);border-color:rgba(16,185,129,0.4);min-height:44px;" onclick="downloadGPX('${day.jointProgram.id}')">
             <i class="fa-solid fa-download"></i> GPX
           </button>
+          <button class="btn-tour-complete" data-tour-id="${day.jointProgram.id}" onclick="toggleTourCompleted('${day.jointProgram.id}', event)">
+            <i class="fa-regular fa-circle-check"></i> <span>Megvolt</span>
+          </button>
         </div>
       </div>
     `;
 
     container.appendChild(card);
   });
+
+  updateTourCompletionUI();
+}
+
+/* ==========================================================================
+   Túra Teljesítési Állapot Rendszer (Megvolt / Teljesítve & Haladáskövető)
+   ========================================================================== */
+function getCompletedTours() {
+  try {
+    const raw = localStorage.getItem('lordtura_completed_tours');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.warn('Hiba a teljesített túrák olvasásakor:', e);
+    return [];
+  }
+}
+
+function isTourCompleted(tourId) {
+  return getCompletedTours().includes(tourId);
+}
+
+window.toggleTourCompleted = function(tourId, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  let completed = getCompletedTours();
+  const index = completed.indexOf(tourId);
+  let isNowCompleted = false;
+
+  if (index > -1) {
+    completed.splice(index, 1);
+    isNowCompleted = false;
+  } else {
+    completed.push(tourId);
+    isNowCompleted = true;
+  }
+
+  try {
+    localStorage.setItem('lordtura_completed_tours', JSON.stringify(completed));
+  } catch (e) {
+    console.warn('Hiba a teljesített túrák mentésekor:', e);
+  }
+
+  let tourName = 'Túra';
+  EXPEDITION_DATA.days.forEach(day => {
+    if (day.climberProgram && day.climberProgram.id === tourId) tourName = day.climberProgram.name;
+    else if (day.hikerProgram && day.hikerProgram.id === tourId) tourName = day.hikerProgram.name;
+    else if (day.jointProgram && day.jointProgram.id === tourId) tourName = day.jointProgram.name;
+  });
+
+  updateTourCompletionUI();
+
+  showAppToast(
+    isNowCompleted 
+      ? `🎉 Sikeresen teljesítve: ${tourName}!` 
+      : `↩️ Teljesítés visszavonva: ${tourName}`,
+    isNowCompleted ? 'fa-circle-check' : 'fa-rotate-left'
+  );
+};
+
+function updateTourCompletionUI() {
+  const completed = getCompletedTours();
+  const completedSet = new Set(completed);
+
+  // 1. Gombok frissítése a kártyákon
+  document.querySelectorAll('.btn-tour-complete[data-tour-id]').forEach(btn => {
+    const id = btn.getAttribute('data-tour-id');
+    const isDone = completedSet.has(id);
+    if (isDone) {
+      btn.classList.add('completed');
+      btn.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> <span>Megvolt</span>`;
+      btn.setAttribute('aria-pressed', 'true');
+      btn.title = 'Kattints a teljesítés visszavonásához';
+    } else {
+      btn.classList.remove('completed');
+      btn.innerHTML = `<i class="fa-regular fa-circle-check"></i> <span>Megvolt</span>`;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.title = 'Kattints a teljesítés rögzítéséhez (Megvolt)';
+    }
+  });
+
+  // 2. Kártyák kiemelése és Done-Pillek beállítása
+  EXPEDITION_DATA.days.forEach(day => {
+    [day.climberProgram, day.hikerProgram, day.jointProgram].forEach(tour => {
+      if (!tour) return;
+      const isDone = completedSet.has(tour.id);
+      
+      const cardEl = document.querySelector(`[data-tour-card-id="${tour.id}"]`);
+      if (cardEl) {
+        if (isDone) {
+          cardEl.classList.add('tour-card-completed');
+        } else {
+          cardEl.classList.remove('tour-card-completed');
+        }
+      }
+
+      const pillContainer = document.getElementById(`status-pill-container-${tour.id}`);
+      if (pillContainer) {
+        pillContainer.innerHTML = isDone 
+          ? `<span class="tour-done-pill"><i class="fa-solid fa-check"></i> Megvolt</span>` 
+          : '';
+      }
+    });
+  });
+
+  // 3. Modális ablak gombjának szinkronizálása
+  const modalBtn = document.getElementById('btnModalTourComplete');
+  if (modalBtn) {
+    const tourId = modalBtn.getAttribute('data-tour-id');
+    const isDone = completedSet.has(tourId);
+    if (isDone) {
+      modalBtn.classList.add('completed');
+      modalBtn.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> <span>Megvolt (Teljesítve)</span>`;
+      modalBtn.setAttribute('aria-pressed', 'true');
+    } else {
+      modalBtn.classList.remove('completed');
+      modalBtn.innerHTML = `<i class="fa-regular fa-circle-check"></i> <span>Jelölés: Megvolt</span>`;
+      modalBtn.setAttribute('aria-pressed', 'false');
+    }
+  }
+
+  // 4. Expedíció Haladáskövető frissítése
+  const totalTours = 12;
+  const validDolomiteTourIds = new Set([
+    'day1_climber', 'day1_hiker', 'day1_joint',
+    'day2_climber', 'day2_hiker', 'day2_joint',
+    'day3_climber', 'day3_hiker', 'day3_joint',
+    'day4_climber', 'day4_hiker', 'day4_joint'
+  ]);
+  let count = 0;
+  completed.forEach(id => {
+    if (validDolomiteTourIds.has(id)) count++;
+  });
+
+  const percent = Math.round((count / totalTours) * 100);
+  const countEl = document.getElementById('trackerCountText');
+  const percentEl = document.getElementById('trackerPercentBadge');
+  const barEl = document.getElementById('trackerBarFill');
+  const celebEl = document.getElementById('trackerCelebration');
+
+  if (countEl) countEl.textContent = `${count} / ${totalTours}`;
+  if (percentEl) percentEl.textContent = `${percent}%`;
+  if (barEl) barEl.style.width = `${percent}%`;
+  if (celebEl) {
+    celebEl.style.display = count === totalTours ? 'flex' : 'none';
+  }
+}
+
+function showAppToast(msg, icon = 'fa-circle-check') {
+  let toast = document.getElementById('gps-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'gps-toast';
+    toast.style.cssText = 'position:fixed;bottom:calc(64px + env(safe-area-inset-bottom, 0px) + 20px);left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid ${icon}" style="color:var(--hiker-color,#10b981);"></i> ${msg}`;
+  toast.style.opacity = '1';
+  toast.style.display = 'flex';
+  if (toast._timeout) clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    if (toast) {
+      toast.style.opacity = '0';
+      setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }
+  }, 3500);
 }
 
 window.filterMapToDay = function(dayNum) {
@@ -1870,11 +2054,15 @@ window.openTourModal = function(tourId) {
       <button class="btn-sm" style="background:#10b981;color:#fff;border-color:#10b981;" onclick="downloadGPX('${tour.id}')">
         <i class="fa-solid fa-download"></i> .GPX Fájl Letöltése
       </button>
+      <button id="btnModalTourComplete" class="btn-tour-complete" data-tour-id="${tour.id}" onclick="toggleTourCompleted('${tour.id}', event)">
+        <i class="fa-regular fa-circle-check"></i> <span>Jelölés: Megvolt</span>
+      </button>
       <button class="btn-sm" onclick="closeTourModal()">Bezárás</button>
     </div>
   `;
 
   modalBackdrop.classList.add('open');
+  updateTourCompletionUI();
 };
 
 function initModalListeners() {
