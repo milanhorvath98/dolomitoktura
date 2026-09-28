@@ -982,6 +982,16 @@ window.handleElevationHover = function(event, containerId) {
   if (tip) {
     tip.classList.add('active');
     tip.querySelector('.tip-content').innerHTML = `<strong>${closest[2]} km</strong> &bull; ${Math.round(closest[3])} m`;
+    const leftPct = (closest[0] / svgWidth) * 100;
+    tip.style.left = `${leftPct}%`;
+    tip.style.right = 'auto';
+    if (leftPct < 25) {
+      tip.style.transform = 'translateX(8px)';
+    } else if (leftPct > 75) {
+      tip.style.transform = 'translateX(calc(-100% - 8px))';
+    } else {
+      tip.style.transform = 'translateX(-50%)';
+    }
   }
 
   highlightElevationPointOnMap(closest[4], closest[5], closest[3], team);
@@ -999,7 +1009,12 @@ window.handleElevationLeave = function(containerId) {
 
   if (scrubLine) scrubLine.style.display = 'none';
   if (scrubDot) scrubDot.style.display = 'none';
-  if (tip) tip.classList.remove('active');
+  if (tip) {
+    tip.classList.remove('active');
+    tip.style.left = '';
+    tip.style.right = '';
+    tip.style.transform = '';
+  }
 
   clearElevationMapHighlight();
 };
@@ -1039,7 +1054,7 @@ window.copyCurrentGpsLocation = function() {
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'gps-toast';
-      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
+      toast.style.cssText = 'position:fixed;bottom:calc(64px + env(safe-area-inset-bottom, 0px) + 20px);left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
       document.body.appendChild(toast);
     }
     toast.innerHTML = (isError ? '⚠️ ' : '📍 ') + msg;

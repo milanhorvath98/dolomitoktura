@@ -148,7 +148,7 @@
             <i class="fa-solid fa-person-hiking"></i>
           </div>
           <div class="stat-info">
-            <h4>Mászó Csapat (4 fő)</h4>
+            <h3>Mászó Csapat (4 fő)</h3>
             <p>Punta Fiames, Monte Paterno, Pisciadù, Piccolo Cir</p>
           </div>
         </div>
@@ -158,7 +158,7 @@
             <i class="fa-solid fa-shoe-prints"></i>
           </div>
           <div class="stat-info">
-            <h4>Túrázó Csapat (6 fő)</h4>
+            <h3>Túrázó Csapat (6 fő)</h3>
             <p>Tofana, Cadini kilátó, Sella &amp; Braies, Seceda</p>
           </div>
         </div>
@@ -168,7 +168,7 @@
             <i class="fa-solid fa-hotel"></i>
           </div>
           <div class="stat-info">
-            <h4>Cortina d'Ampezzo</h4>
+            <h3>Cortina d'Ampezzo</h3>
             <p>Közös bázis apartman 4 éjszakára</p>
           </div>
         </div>
@@ -178,7 +178,7 @@
             <i class="fa-solid fa-camera-retro"></i>
           </div>
           <div class="stat-info">
-            <h4>Ikonikus Látvány</h4>
+            <h3>Ikonikus Látvány</h3>
             <p>Tre Cime, Braies-tó, Seceda fűrészgerinc</p>
           </div>
         </div>
@@ -607,7 +607,7 @@
               <span>Résztvevők száma:</span>
               <span class="calc-value-badge" id="people-value">10 fő</span>
             </div>
-            <input type="range" class="calc-slider" id="people-slider" min="2" max="15" value="10" step="1">
+            <input type="range" class="calc-slider" id="people-slider" min="2" max="15" value="10" step="1" aria-label="Résztvevők száma" aria-valuemin="2" aria-valuemax="15" aria-valuenow="10">
             <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.2rem;">
               <span>2 fő</span>
               <span>10 fő (Eredeti terv)</span>
@@ -758,7 +758,7 @@
   </main>
 
   <!-- RÉSZLETES ÚTIKALAUZ MODÁLIS ABLAK -->
-  <div class="modal-backdrop" id="tour-detail-modal">
+  <div class="modal-backdrop" id="tour-detail-modal" role="dialog" aria-modal="true" aria-label="Részletes túrakalauz">
     <div class="modal-content">
       <button class="modal-close-btn" id="modal-close-btn" aria-label="Bezárás">
         <i class="fa-solid fa-xmark"></i>

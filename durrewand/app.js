@@ -596,7 +596,7 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
     <circle cx="${summitX}" cy="${summitY}" r="5.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5" style="pointer-events:none;"/>
     
     <!-- Summit Floating Pill Badge -->
-    <g transform="translate(${summitX}, ${summitY - 14})" style="pointer-events:none;">
+    <g id="summitPillBadge" transform="translate(${summitX}, ${summitY - 14})" style="pointer-events:none; transition: opacity 0.2s ease;">
       <rect x="-105" y="-28" width="210" height="26" rx="13" fill="rgba(15, 23, 42, 0.94)" stroke="#f59e0b" stroke-width="1.5"/>
       <text x="0" y="-11" fill="#fbbf24" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif">
         ⛰️ Plattenstein Csúcs &bull; 1 154 m
@@ -752,6 +752,11 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
       tooltip.classList.add('active');
     }
     
+    const summitBadge = document.getElementById('summitPillBadge');
+    if (summitBadge) {
+      summitBadge.style.opacity = '0';
+    }
+    
     // Synchronize Live Marker on Leaflet Map
     if (liveTrackMarker) {
       liveTrackMarker.setLatLng([pt.lat, pt.lon]);
@@ -811,6 +816,10 @@ function renderSvgElevationProfile(track, totalDist, minEle, maxEle) {
     scrubLine.setAttribute('opacity', '0');
     scrubCircle.setAttribute('opacity', '0');
     if (tooltip) tooltip.classList.remove('active');
+    const summitBadge = document.getElementById('summitPillBadge');
+    if (summitBadge) {
+      summitBadge.style.opacity = '1';
+    }
   }
   
   svg.addEventListener('mouseleave', hideScrub);
@@ -1126,6 +1135,12 @@ function initNavigation() {
   document.querySelectorAll('.drawer-link').forEach(link => {
     link.addEventListener('click', closeDrawer);
   });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+      closeDrawer();
+    }
+  });
   
   // Floating Action Button (Return to Map)
   window.addEventListener('scroll', () => {
@@ -1156,7 +1171,7 @@ window.copyCurrentGpsLocation = function() {
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'gps-toast';
-      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
+      toast.style.cssText = 'position:fixed;bottom:calc(64px + env(safe-area-inset-bottom, 0px) + 20px);left:50%;transform:translateX(-50%);z-index:9999;padding:0.75rem 1.25rem;border-radius:12px;background:#0f172a;color:#f8fafc;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-size:0.9rem;font-weight:600;display:flex;align-items:center;gap:0.6rem;max-width:90vw;text-align:center;transition:all 0.3s ease;';
       document.body.appendChild(toast);
     }
     toast.innerHTML = (isError ? '⚠️ ' : '📍 ') + msg;

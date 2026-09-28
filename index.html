@@ -535,10 +535,11 @@
       margin-bottom: 0.85rem;
     }
 
-    .expedition-meta-chip {
+    .expedition-meta-chip,
+    .meta-chip {
       font-size: 0.75rem;
       font-weight: 600;
-      padding: 0.3rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       border-radius: var(--radius-full);
       border: 1px solid var(--neu-border);
       box-shadow: var(--shadow-inset-sm);
@@ -546,10 +547,11 @@
       color: var(--text-secondary);
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
     }
 
-    .expedition-card-title {
+    .expedition-card-title,
+    .expedition-title {
       font-size: 1.35rem;
       font-weight: 800;
       color: var(--text-primary);
@@ -557,7 +559,8 @@
       line-height: 1.25;
     }
 
-    .expedition-card-desc {
+    .expedition-card-desc,
+    .expedition-desc {
       font-size: 0.95rem;
       color: var(--text-secondary);
       line-height: 1.6;
@@ -565,7 +568,8 @@
       flex-grow: 1;
     }
 
-    .expedition-features-list {
+    .expedition-features-list,
+    .expedition-highlights-list {
       list-style: none;
       margin-bottom: 1.5rem;
       display: flex;
@@ -575,7 +579,8 @@
       padding-top: 1rem;
     }
 
-    .expedition-features-list li {
+    .expedition-features-list li,
+    .expedition-highlight-item {
       font-size: 0.88rem;
       color: var(--text-primary);
       display: flex;
@@ -584,16 +589,62 @@
       font-weight: 500;
     }
 
-    .expedition-features-list li i {
+    .expedition-features-list li i,
+    .expedition-highlight-item i {
       color: var(--hiker-color);
       font-size: 0.95rem;
+      flex-shrink: 0;
     }
 
-    .expedition-card-actions {
-      display: grid;
-      grid-template-columns: 1fr auto;
+    .expedition-card-actions,
+    .expedition-card-footer {
+      display: flex;
+      align-items: center;
       gap: 0.75rem;
       margin-top: auto;
+    }
+
+    .btn-open-disabled {
+      min-height: 44px;
+      width: 100%;
+      padding: 0.75rem 1.4rem;
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--neu-border);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: var(--shadow-inset-sm);
+      cursor: not-allowed;
+      opacity: 0.75;
+    }
+
+    .custom-request {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .custom-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--neu-border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--accent-blue);
+      margin-bottom: 1.25rem;
     }
 
     .btn-card-primary {
@@ -678,7 +729,8 @@
     }
 
     /* Funkciók & Eszköztár Szekció */
-    .portal-features {
+    .portal-features,
+    .portal-features-section {
       background: var(--bg-card);
       border-top: 1px solid var(--neu-border);
       border-bottom: 1px solid var(--neu-border);
@@ -686,7 +738,8 @@
       box-shadow: var(--shadow-inset);
     }
 
-    .features-grid {
+    .features-grid,
+    .portal-features-grid {
       max-width: 1400px;
       margin: 0 auto;
       display: grid;
@@ -708,7 +761,8 @@
       transform: translateY(-2px);
     }
 
-    .feature-icon {
+    .feature-icon,
+    .feature-card-icon {
       width: 58px;
       height: 58px;
       border-radius: 18px;
@@ -799,6 +853,15 @@
     }
 
     @media (max-width: 768px) {
+      .portal-nav {
+        padding: max(0.5rem, env(safe-area-inset-top)) 1rem 0.5rem !important;
+      }
+      .portal-brand-text span {
+        display: none !important;
+      }
+      .portal-brand-text h1 {
+        font-size: 1.25rem !important;
+      }
       .portal-nav-links {
         display: flex;
         gap: 0.5rem;
@@ -812,9 +875,19 @@
         padding: 0.5rem 0.85rem;
         font-size: 0.8rem;
       }
-      .neo-theme-toggle {
-        min-height: 44px;
-        min-width: 44px;
+      .neo-theme-toggle span {
+        display: none !important;
+      }
+      .portal-nav .neo-theme-toggle {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
       }
       .portal-stats-grid {
         grid-template-columns: 1fr;
@@ -829,6 +902,10 @@
       }
       .portal-hero {
         padding: 4rem 1rem 3.5rem;
+      }
+      .features-grid,
+      .portal-features-grid {
+        grid-template-columns: 1fr !important;
       }
     }
   </style>

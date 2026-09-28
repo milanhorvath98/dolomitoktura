@@ -9,6 +9,8 @@ Covers:
   5. Mobile Touch Target Ergonomics (>=44x44px)
   6. Git Safety & .gitignore Exclusion
   7. Navigation & Reachability
+  8. Z-Index Stacking Hierarchy
+  9. Responsive Grid Blowout Protection
 """
 
 import os
@@ -292,6 +294,71 @@ def run_tests():
         print("  [FAIL] durrewand/index.html contains outdated 'Neo-Brutalist Téma Váltó' label")
     else:
         print("  [PASS] durrewand/index.html uses updated theme toggle label")
+
+    # ----------------------------------------------------
+    # 8. Z-Index Stacking Hierarchy
+    # ----------------------------------------------------
+    print("\n[GATE 8] Z-Index Stacking Hierarchy:")
+    with open(os.path.join(ROOT_DIR, "styles.css"), "r", encoding="utf-8") as f:
+        styles_css_content = f.read()
+    with open(os.path.join(ROOT_DIR, "durrewand", "styles.css"), "r", encoding="utf-8") as f:
+        durre_css_content = f.read()
+
+    # styles.css z-index hierarchy
+    z_tests_main = [
+        (".mobile-bottom-nav z-index >= 1100", r"\.mobile-bottom-nav[^{]*\{[^}]*z-index:\s*(\d+)", styles_css_content, 1100),
+        (".floating-map-jump-btn z-index >= 1150", r"\.floating-map-jump-btn[^{]*\{[^}]*z-index:\s*(\d+)", styles_css_content, 1150),
+        (".mobile-drawer-overlay z-index >= 2050", r"\.mobile-drawer-overlay[^{]*\{[^}]*z-index:\s*(\d+)", styles_css_content, 2050),
+        (".mobile-drawer z-index >= 2100", r"\.mobile-drawer(?!\w|\-)[^{]*\{[^}]*z-index:\s*(\d+)", styles_css_content, 2100),
+        (".modal-backdrop z-index >= 3000", r"\.modal-backdrop[^{]*\{[^}]*z-index:\s*(\d+)", styles_css_content, 3000),
+    ]
+    for label, pattern, src, min_val in z_tests_main:
+        m = re.search(pattern, src)
+        if m and int(m.group(1)) >= min_val:
+            print(f"  [PASS] styles.css: {label} (found {m.group(1)})")
+        else:
+            total_failures += 1
+            print(f"  [FAIL] styles.css: {label} (expected >= {min_val})")
+
+    # durrewand/styles.css z-index hierarchy
+    z_tests_durre = [
+        (".mobile-bottom-bar z-index >= 1100", r"\.mobile-bottom-bar[^{]*\{[^}]*z-index:\s*(\d+)", durre_css_content, 1100),
+        (".floating-map-jump-btn z-index >= 1150", r"\.floating-map-jump-btn[^{]*\{[^}]*z-index:\s*(\d+)", durre_css_content, 1150),
+        (".drawer-backdrop z-index >= 2050", r"\.drawer-backdrop[^{]*\{[^}]*z-index:\s*(\d+)", durre_css_content, 2050),
+        (".mobile-drawer z-index >= 2100", r"\.mobile-drawer(?!\w|\-)[^{]*\{[^}]*z-index:\s*(\d+)", durre_css_content, 2100),
+        (".lightbox-modal z-index >= 3000", r"\.lightbox-modal[^{]*\{[^}]*z-index:\s*(\d+)", durre_css_content, 3000),
+    ]
+    for label, pattern, src, min_val in z_tests_durre:
+        m = re.search(pattern, src)
+        if m and int(m.group(1)) >= min_val:
+            print(f"  [PASS] durrewand/styles.css: {label} (found {m.group(1)})")
+        else:
+            total_failures += 1
+            print(f"  [FAIL] durrewand/styles.css: {label} (expected >= {min_val})")
+
+    # ----------------------------------------------------
+    # 9. Responsive Grid Blowout Protection
+    # ----------------------------------------------------
+    print("\n[GATE 9] Responsive Grid Blowout Protection:")
+    main_grids = [".webcams-grid", ".gastro-grid", ".checklist-grid", ".parking-hub-grid", ".weather-grid", ".logistics-grid"]
+    media_blocks = re.findall(r"@media\s*\(\s*max-width:\s*768px\s*\)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}", styles_css_content)
+    media_block = "\n".join(media_blocks)
+    for g in main_grids:
+        if g in media_block and "1fr" in media_block:
+            print(f"  [PASS] styles.css: {g} has responsive 1fr override in @media (max-width: 768px)")
+        else:
+            total_failures += 1
+            print(f"  [FAIL] styles.css: {g} missing 1fr override in @media (max-width: 768px)")
+
+    durre_grids = [".logistics-grid", ".checklist-grid"]
+    durre_media_blocks = re.findall(r"@media\s*\(\s*max-width:\s*768px\s*\)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}", durre_css_content)
+    durre_media = "\n".join(durre_media_blocks)
+    for g in durre_grids:
+        if g in durre_media and "1fr" in durre_media:
+            print(f"  [PASS] durrewand/styles.css: {g} has responsive 1fr override in @media (max-width: 768px)")
+        else:
+            total_failures += 1
+            print(f"  [FAIL] durrewand/styles.css: {g} missing 1fr override in @media (max-width: 768px)")
 
     # Remote Sync Ping
     try:
